@@ -71,3 +71,9 @@ The project is library-first: a framework-free portable notification module owns
 - **Fix**: Added an explicit packaging script that rebuilds an isolated `dist/extension/`, copies manifest and stylesheet assets, vendors the local CJK font pack, and refreshes root `index.js` for direct installation.
 - **Affected**: `vite.config.ts`, `package.json`, `scripts/package-extension.mjs`, `style.css`, `index.js`
 - **Watch out**: Always verify extension artifacts from a clean output directory rather than trusting files left by a previous build.
+
+### [2026-07-31] Bottom positions escaped the mobile viewport
+- **Problem**: The fixed toast host was appended to `body`; when the mobile host page established a transformed or document-sized body containing block, bottom alignment targeted the body height instead of the visual viewport.
+- **Fix**: Mounted the overlay under `document.documentElement` and set explicit `100vw` by `100dvh` viewport dimensions, preserving the high fixed layer outside body transforms.
+- **Affected**: `src/toast/notifier.ts`, `src/toast/notifier.test.ts`, `src/index.test.ts`, `index.js`
+- **Watch out**: Keep the overlay outside transformed application roots and retain the real-browser transformed-body geometry regression.

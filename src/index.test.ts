@@ -13,6 +13,6 @@ describe('public entry point', () => {
     expect(typeof library.createNotifier).toBe('function');
     const handle = library.toast.show({ message: 'Ready' });
     expect(handle.id).toBe('st-toast-1');
-    expect(document.body.children).toHaveLength(1);
+    expect(document.querySelectorAll('[data-st-toast-host]')).toHaveLength(1);
   });
 });

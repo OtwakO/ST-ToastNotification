@@ -1,11 +1,11 @@
 const M = "st-toast:show";
-function q(t, e = {}) {
-  const o = e.globalTarget ?? globalThis, i = e.eventTarget ?? document, a = o.STToastNotification;
+function q(e, t = {}) {
+  const o = t.globalTarget ?? globalThis, i = t.eventTarget ?? document, a = o.STToastNotification;
   o.STToastNotification = {
-    show: (d) => t.show(d)
+    show: (d) => e.show(d)
   };
   const l = (d) => {
-    t.show(d.detail);
+    e.show(d.detail);
   };
   return i.addEventListener(M, l), () => {
     i.removeEventListener(M, l), a ? o.STToastNotification = a : delete o.STToastNotification;
@@ -26,27 +26,27 @@ const c = {
   maxVisible: 3,
   zIndex: 2147483646
 };
-function k(t = {}) {
-  const e = {
+function k(e = {}) {
+  const t = {
     ...c,
-    ...t,
+    ...e,
     preset: "whisper"
   };
-  if (h("primary", e.primary), h("accent1", e.accent1), h("accent2", e.accent2), h("accent3", e.accent3), h("foreground", e.foreground), h("mutedForeground", e.mutedForeground), N("titleFontSizePx", e.titleFontSizePx), N("detailFontSizePx", e.detailFontSizePx), !Number.isFinite(e.durationMs) || e.durationMs <= 0)
+  if (h("primary", t.primary), h("accent1", t.accent1), h("accent2", t.accent2), h("accent3", t.accent3), h("foreground", t.foreground), h("mutedForeground", t.mutedForeground), N("titleFontSizePx", t.titleFontSizePx), N("detailFontSizePx", t.detailFontSizePx), !Number.isFinite(t.durationMs) || t.durationMs <= 0)
     throw new RangeError("durationMs must be greater than 0");
-  if (!Number.isInteger(e.maxVisible) || e.maxVisible <= 0)
+  if (!Number.isInteger(t.maxVisible) || t.maxVisible <= 0)
     throw new RangeError("maxVisible must be a positive integer");
-  if (!Number.isInteger(e.zIndex) || e.zIndex < 0)
+  if (!Number.isInteger(t.zIndex) || t.zIndex < 0)
     throw new RangeError("zIndex must be a non-negative integer");
-  return e;
+  return t;
 }
-function h(t, e) {
-  if (!/^#[0-9a-f]{6}$/i.test(e))
-    throw new TypeError(`${t} must be a six-digit hex color`);
+function h(e, t) {
+  if (!/^#[0-9a-f]{6}$/i.test(t))
+    throw new TypeError(`${e} must be a six-digit hex color`);
 }
-function N(t, e) {
-  if (!Number.isFinite(e) || e <= 0)
-    throw new RangeError(`${t} must be a finite number greater than 0`);
+function N(e, t) {
+  if (!Number.isFinite(t) || t <= 0)
+    throw new RangeError(`${e} must be a finite number greater than 0`);
 }
 const A = {
   info: "Info",
@@ -54,15 +54,15 @@ const A = {
   warning: "Warning",
   error: "Error"
 };
-function H(t = {}) {
-  const e = k(t);
+function H(e = {}) {
+  const t = k(e);
   let o = 0, i, a, l, d;
   const m = [], b = [];
   function u() {
     if (i) return;
-    i = document.createElement("div"), i.dataset.stToastHost = "", i.style.position = "fixed", i.style.inset = "0", i.style.zIndex = String(e.zIndex), i.style.pointerEvents = "none";
+    i = document.createElement("div"), i.dataset.stToastHost = "", i.style.position = "fixed", i.style.inset = "0 auto auto 0", i.style.width = "100vw", i.style.height = "100dvh", i.style.maxWidth = "100%", i.style.zIndex = String(t.zIndex), i.style.pointerEvents = "none";
     const n = i.attachShadow({ mode: "open" });
-    n.innerHTML = `<style>${O(e)}</style><div class="stack" data-position="${e.position}"></div><div class="live polite" aria-live="polite" aria-atomic="true"></div><div class="live assertive" aria-live="assertive" aria-atomic="true"></div>`, a = n.querySelector(".stack"), l = n.querySelector(".polite"), d = n.querySelector(".assertive"), document.body.append(i);
+    n.innerHTML = `<style>${O(t)}</style><div class="stack" data-position="${t.position}"></div><div class="live polite" aria-live="polite" aria-atomic="true"></div><div class="live assertive" aria-live="assertive" aria-atomic="true"></div>`, a = n.querySelector(".stack"), l = n.querySelector(".polite"), d = n.querySelector(".assertive"), document.documentElement.append(i);
   }
   function S(n) {
     if (n.input.announcement === "off") return;
@@ -90,7 +90,7 @@ function H(t = {}) {
     const s = m.indexOf(n);
     s >= 0 && m.splice(s, 1);
     const g = b.indexOf(n);
-    if (g >= 0 && b.splice(g, 1), n.resolveClosed(), m.length < e.maxVisible) {
+    if (g >= 0 && b.splice(g, 1), n.resolveClosed(), m.length < t.maxVisible) {
       const p = b.shift();
       p && $(p);
     }
@@ -103,7 +103,7 @@ function H(t = {}) {
   }
   return {
     show(n) {
-      const s = L(n, e);
+      const s = L(n, t);
       let g = () => {
       };
       const p = new Promise((v) => {
@@ -116,12 +116,12 @@ function H(t = {}) {
           tone: n.tone ?? "info",
           announcement: n.announcement ?? "polite"
         },
-        durationMs: n.durationMs ?? e.durationMs,
+        durationMs: n.durationMs ?? t.durationMs,
         resolveClosed: g,
         closed: p,
         settled: !1
       };
-      return m.length < e.maxVisible ? $(f) : b.push(f), {
+      return m.length < t.maxVisible ? $(f) : b.push(f), {
         id: f.id,
         closed: p,
         dismiss: () => x(f)
@@ -131,19 +131,19 @@ function H(t = {}) {
     destroy: C
   };
 }
-function L(t, e) {
-  if (typeof t.message != "string" || t.message.trim() === "")
+function L(e, t) {
+  if (typeof e.message != "string" || e.message.trim() === "")
     throw new TypeError("message must be a non-empty string");
-  const o = t.durationMs ?? e.durationMs;
+  const o = e.durationMs ?? t.durationMs;
   if (!Number.isFinite(o) || o <= 0)
     throw new RangeError("durationMs must be greater than 0");
-  return t.message.trim();
+  return e.message.trim();
 }
-function I(t) {
-  return `${A[t.tone ?? "info"]}: ${t.message}${t.detail ? `. ${t.detail}` : ""}`;
+function I(e) {
+  return `${A[e.tone ?? "info"]}: ${e.message}${e.detail ? `. ${e.detail}` : ""}`;
 }
-function O(t) {
-  return `:host{all:initial}.stack{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:68px 17px;box-sizing:border-box;pointer-events:none}.stack[data-position^="bottom"]{justify-content:flex-end;padding-bottom:24px}.stack[data-position$="left"]{align-items:flex-start}.stack[data-position$="right"]{align-items:flex-end}.toast{opacity:0;animation:whisper-life var(--toast-duration) ease-in-out both;max-width:min(440px,calc(100vw - 34px));color:${t.foreground}}.toast-inner{position:relative;display:grid;place-items:center;min-width:min(380px,calc(100vw - 34px));min-height:48px;padding:11px 76px;box-sizing:border-box}.toast-inner::before{content:"";position:absolute;z-index:-1;inset:-6px -12px;border-radius:13px 13px 18px 18px;background:radial-gradient(ellipse at 50% 130%,${t.accent1}33,transparent 64%),radial-gradient(ellipse at 50% -45%,${t.accent2}17,transparent 58%),linear-gradient(110deg,${t.accent3}0a,transparent 34%,transparent 66%,${t.accent3}08),${t.primary}f5;box-shadow:0 10px 26px #0006,0 2px 7px #0004,inset 0 1px ${t.accent2}0b;mask-image:linear-gradient(90deg,transparent,#000 28%,#000 72%,transparent)}.copy{position:relative;width:100%;text-align:center}.copy::before,.copy::after{content:"";position:absolute;top:50%;width:48px;height:1px}.copy::before{right:calc(100% + 12px);background:linear-gradient(90deg,transparent,${t.accent1}9e)}.copy::after{left:calc(100% + 12px);background:linear-gradient(90deg,${t.accent1}9e,transparent)}.title{font-family:Georgia,serif;font-size:${t.titleFontSizePx}px;font-style:italic;letter-spacing:.025em}.detail{margin-top:3px;color:${t.mutedForeground};font-family:Georgia,serif;font-size:${t.detailFontSizePx}px;letter-spacing:.06em}.title:lang(zh-CN),.detail:lang(zh-CN){font-family:"Noto Sans SC Variable","Microsoft YaHei","PingFang SC",sans-serif;font-style:normal;font-weight:600;letter-spacing:.04em}.title:lang(zh-TW),.title:lang(zh-HK),.title:lang(zh-Hant),.detail:lang(zh-TW),.detail:lang(zh-HK),.detail:lang(zh-Hant){font-family:"Noto Sans TC Variable","Microsoft JhengHei","PingFang TC",sans-serif;font-style:normal;font-weight:600;letter-spacing:.04em}.live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}@keyframes whisper-life{0%,100%{opacity:0}8%,82%{opacity:1}}@media(prefers-reduced-motion:reduce){.toast{animation:none;opacity:1}}`;
+function O(e) {
+  return `:host{all:initial}.stack{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:68px 17px;box-sizing:border-box;pointer-events:none}.stack[data-position^="bottom"]{justify-content:flex-end;padding-bottom:24px}.stack[data-position$="left"]{align-items:flex-start}.stack[data-position$="right"]{align-items:flex-end}.toast{opacity:0;animation:whisper-life var(--toast-duration) ease-in-out both;max-width:min(440px,calc(100vw - 34px));color:${e.foreground}}.toast-inner{position:relative;display:grid;place-items:center;min-width:min(380px,calc(100vw - 34px));min-height:48px;padding:11px 76px;box-sizing:border-box}.toast-inner::before{content:"";position:absolute;z-index:-1;inset:-6px -12px;border-radius:13px 13px 18px 18px;background:radial-gradient(ellipse at 50% 130%,${e.accent1}33,transparent 64%),radial-gradient(ellipse at 50% -45%,${e.accent2}17,transparent 58%),linear-gradient(110deg,${e.accent3}0a,transparent 34%,transparent 66%,${e.accent3}08),${e.primary}f5;box-shadow:0 10px 26px #0006,0 2px 7px #0004,inset 0 1px ${e.accent2}0b;mask-image:linear-gradient(90deg,transparent,#000 28%,#000 72%,transparent)}.copy{position:relative;width:100%;text-align:center}.copy::before,.copy::after{content:"";position:absolute;top:50%;width:48px;height:1px}.copy::before{right:calc(100% + 12px);background:linear-gradient(90deg,transparent,${e.accent1}9e)}.copy::after{left:calc(100% + 12px);background:linear-gradient(90deg,${e.accent1}9e,transparent)}.title{font-family:Georgia,serif;font-size:${e.titleFontSizePx}px;font-style:italic;letter-spacing:.025em}.detail{margin-top:3px;color:${e.mutedForeground};font-family:Georgia,serif;font-size:${e.detailFontSizePx}px;letter-spacing:.06em}.title:lang(zh-CN),.detail:lang(zh-CN){font-family:"Noto Sans SC Variable","Microsoft YaHei","PingFang SC",sans-serif;font-style:normal;font-weight:600;letter-spacing:.04em}.title:lang(zh-TW),.title:lang(zh-HK),.title:lang(zh-Hant),.detail:lang(zh-TW),.detail:lang(zh-HK),.detail:lang(zh-Hant){font-family:"Noto Sans TC Variable","Microsoft JhengHei","PingFang TC",sans-serif;font-style:normal;font-weight:600;letter-spacing:.04em}.live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}@keyframes whisper-life{0%,100%{opacity:0}8%,82%{opacity:1}}@media(prefers-reduced-motion:reduce){.toast{animation:none;opacity:1}}`;
 }
 const E = "st_toast_notification", r = {
   preset: "whisper",
@@ -166,29 +166,29 @@ const E = "st_toast_notification", r = {
   "bottom-center",
   "bottom-right"
 ];
-function _(t) {
-  const e = D(t[E]) ? t[E] : {}, o = {
-    preset: e.preset === "whisper" ? "whisper" : r.preset,
-    primary: y(e.primary, r.primary),
-    accent1: y(e.accent1, r.accent1),
-    accent2: y(e.accent2, r.accent2),
-    accent3: y(e.accent3, r.accent3),
-    foreground: y(e.foreground, r.foreground),
+function _(e) {
+  const t = D(e[E]) ? e[E] : {}, o = {
+    preset: t.preset === "whisper" ? "whisper" : r.preset,
+    primary: y(t.primary, r.primary),
+    accent1: y(t.accent1, r.accent1),
+    accent2: y(t.accent2, r.accent2),
+    accent3: y(t.accent3, r.accent3),
+    foreground: y(t.foreground, r.foreground),
     mutedForeground: y(
-      e.mutedForeground,
+      t.mutedForeground,
       r.mutedForeground
     ),
     titleFontSizePx: T(
-      e.titleFontSizePx,
+      t.titleFontSizePx,
       r.titleFontSizePx
     ),
     detailFontSizePx: T(
-      e.detailFontSizePx,
+      t.detailFontSizePx,
       r.detailFontSizePx
     ),
-    durationMs: T(e.durationMs, r.durationMs),
-    position: R.includes(e.position) ? e.position : r.position,
-    maxVisible: T(e.maxVisible, r.maxVisible)
+    durationMs: T(t.durationMs, r.durationMs),
+    position: R.includes(t.position) ? t.position : r.position,
+    maxVisible: T(t.maxVisible, r.maxVisible)
   };
   let i = o;
   try {
@@ -196,21 +196,21 @@ function _(t) {
   } catch {
     i = { ...r };
   }
-  return t[E] = i, i;
+  return e[E] = i, i;
 }
-function D(t) {
-  return typeof t == "object" && t !== null && !Array.isArray(t);
+function D(e) {
+  return typeof e == "object" && e !== null && !Array.isArray(e);
 }
-function y(t, e) {
-  return typeof t == "string" ? t : e;
+function y(e, t) {
+  return typeof e == "string" ? e : t;
 }
-function T(t, e) {
-  return typeof t == "number" ? t : e;
+function T(e, t) {
+  return typeof e == "number" ? e : t;
 }
-function j(t, e = document.querySelector("#extensions_settings2")) {
-  if (!e) throw new Error("SillyTavern extension settings panel was not found");
-  const o = _(t.extensionSettings), i = B(o);
-  e.append(i);
+function j(e, t = document.querySelector("#extensions_settings2")) {
+  if (!t) throw new Error("SillyTavern extension settings panel was not found");
+  const o = _(e.extensionSettings), i = W(o);
+  t.append(i);
   let a, l;
   const d = () => {
     a?.destroy(), l?.(), a = H(o), l = q(a);
@@ -227,7 +227,7 @@ function j(t, e = document.querySelector("#extensions_settings2")) {
     const x = i.querySelector(
       `[data-output="${u.name}"]`
     );
-    x && (x.value = u.value), t.saveSettingsDebounced(), d();
+    x && (x.value = u.value), e.saveSettingsDebounced(), d();
   };
   return i.addEventListener("input", m), i.querySelector('[data-action="preview"]')?.addEventListener("click", () => {
     a.show({
@@ -236,39 +236,39 @@ function j(t, e = document.querySelector("#extensions_settings2")) {
       tone: "info"
     });
   }), i.querySelector('[data-action="reset"]')?.addEventListener("click", () => {
-    Object.assign(o, r), V(i, o), t.saveSettingsDebounced(), d();
+    Object.assign(o, r), V(i, o), e.saveSettingsDebounced(), d();
   }), () => {
     i.removeEventListener("input", m), l(), a.destroy(), i.remove();
   };
 }
-function B(t) {
-  const e = document.createElement("section");
-  return e.dataset.stToastSettings = "", e.className = "st-toast-settings", e.innerHTML = `<div class="inline-drawer"><div class="inline-drawer-toggle inline-drawer-header"><b>Toast Notifications</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content"><label>Preset<select name="preset"><option value="whisper">Whisper</option></select></label><div class="st-toast-color-grid">${w("Primary", "primary")}${w("Accent 1", "accent1")}${w("Accent 2", "accent2")}${w("Accent 3", "accent3")}${w("Text", "foreground")}${w("Muted text", "mutedForeground")}</div>${z("Title size", "titleFontSizePx", 10, 24)}${z("Detail size", "detailFontSizePx", 8, 18)}${z("Duration", "durationMs", 1e3, 1e4, 100)}${z("Maximum visible", "maxVisible", 1, 6)}<label>Position<select name="position"><option value="top-left">Top left</option><option value="top-center">Top center</option><option value="top-right">Top right</option><option value="bottom-left">Bottom left</option><option value="bottom-center">Bottom center</option><option value="bottom-right">Bottom right</option></select></label><div class="st-toast-actions"><button type="button" class="menu_button" data-action="preview">Preview</button><button type="button" class="menu_button" data-action="reset">Reset</button></div></div></div>`, V(e, t), e;
+function W(e) {
+  const t = document.createElement("section");
+  return t.dataset.stToastSettings = "", t.className = "st-toast-settings", t.innerHTML = `<div class="inline-drawer"><div class="inline-drawer-toggle inline-drawer-header"><b>Toast Notifications</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content"><label>Preset<select name="preset"><option value="whisper">Whisper</option></select></label><div class="st-toast-color-grid">${w("Primary", "primary")}${w("Accent 1", "accent1")}${w("Accent 2", "accent2")}${w("Accent 3", "accent3")}${w("Text", "foreground")}${w("Muted text", "mutedForeground")}</div>${z("Title size", "titleFontSizePx", 10, 24)}${z("Detail size", "detailFontSizePx", 8, 18)}${z("Duration", "durationMs", 1e3, 1e4, 100)}${z("Maximum visible", "maxVisible", 1, 6)}<label>Position<select name="position"><option value="top-left">Top left</option><option value="top-center">Top center</option><option value="top-right">Top right</option><option value="bottom-left">Bottom left</option><option value="bottom-center">Bottom center</option><option value="bottom-right">Bottom right</option></select></label><div class="st-toast-actions"><button type="button" class="menu_button" data-action="preview">Preview</button><button type="button" class="menu_button" data-action="reset">Reset</button></div></div></div>`, V(t, e), t;
 }
-function w(t, e) {
-  return `<label>${t}<input type="color" name="${e}"></label>`;
+function w(e, t) {
+  return `<label>${e}<input type="color" name="${t}"></label>`;
 }
-function z(t, e, o, i, a = 1) {
-  return `<label>${t}<input type="range" name="${e}" min="${o}" max="${i}" step="${a}"><output data-output="${e}"></output></label>`;
+function z(e, t, o, i, a = 1) {
+  return `<label>${e}<input type="range" name="${t}" min="${o}" max="${i}" step="${a}"><output data-output="${t}"></output></label>`;
 }
-function V(t, e) {
-  for (const [o, i] of Object.entries(e)) {
-    const a = t.querySelector(
+function V(e, t) {
+  for (const [o, i] of Object.entries(t)) {
+    const a = e.querySelector(
       `[name="${o}"]`
     );
     a && (a.value = String(i));
-    const l = t.querySelector(`[data-output="${o}"]`);
+    const l = e.querySelector(`[data-output="${o}"]`);
     l && (l.value = String(i));
   }
 }
 let F;
-function W() {
+function B() {
   F?.(), F = j(SillyTavern.getContext());
 }
 function G() {
   F?.(), F = void 0;
 }
 export {
-  W as onActivate,
+  B as onActivate,
   G as onDisable
 };

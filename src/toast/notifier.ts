@@ -63,7 +63,10 @@ export function createNotifier(options: NotifierOptions = {}): Notifier {
     host = document.createElement('div');
     host.dataset.stToastHost = '';
     host.style.position = 'fixed';
-    host.style.inset = '0';
+    host.style.inset = '0 auto auto 0';
+    host.style.width = '100vw';
+    host.style.height = '100dvh';
+    host.style.maxWidth = '100%';
     host.style.zIndex = String(config.zIndex);
     host.style.pointerEvents = 'none';
     const root = host.attachShadow({ mode: 'open' });
@@ -71,7 +74,7 @@ export function createNotifier(options: NotifierOptions = {}): Notifier {
     stack = root.querySelector('.stack') as HTMLElement;
     politeRegion = root.querySelector('.polite') as HTMLElement;
     assertiveRegion = root.querySelector('.assertive') as HTMLElement;
-    document.body.append(host);
+    document.documentElement.append(host);
   }
 
   function announce(record: ToastRecord): void {

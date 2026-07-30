@@ -5,7 +5,9 @@ import { createNotifier } from './notifier';
 
 afterEach(() => {
   vi.useRealTimers();
+  document.querySelectorAll('[data-st-toast-host]').forEach((host) => host.remove());
   document.body.replaceChildren();
+  document.body.removeAttribute('style');
 });
 
 describe('createNotifier', () => {
@@ -24,8 +26,8 @@ describe('createNotifier', () => {
       lang: 'zh-CN',
     });
 
-    expect(document.body.children).toHaveLength(1);
-    const root = document.body.firstElementChild?.shadowRoot;
+    expect(document.querySelectorAll('[data-st-toast-host]')).toHaveLength(1);
+    const root = document.querySelector<HTMLElement>('[data-st-toast-host]')?.shadowRoot;
     expect(root).not.toBeNull();
     expect(root?.querySelectorAll('.toast')).toHaveLength(1);
     expect(root?.querySelector('.title')?.textContent).toBe(
@@ -44,12 +46,28 @@ describe('createNotifier', () => {
     expect(root?.querySelector('.title')?.getAttribute('lang')).toBe('zh-CN');
   });
 
+  it('anchors the overlay outside a transformed body for mobile bottom positions', () => {
+    document.body.style.transform = 'translateZ(0)';
+    document.body.style.height = '1800px';
+    const notifier = createNotifier({ position: 'bottom-center' });
+
+    notifier.show({ message: 'Bottom mobile' });
+
+    const host = document.querySelector<HTMLElement>('[data-st-toast-host]');
+    expect(host?.parentElement).toBe(document.documentElement);
+    expect(host?.style.width).toBe('100vw');
+    expect(host?.style.height).toBe('100dvh');
+    expect(
+      host?.shadowRoot?.querySelector('.stack')?.getAttribute('data-position'),
+    ).toBe('bottom-center');
+  });
+
   it('keeps a FIFO queue, supports dismissal, and resolves each closed promise', async () => {
     vi.useFakeTimers();
     const notifier = createNotifier({ maxVisible: 1, durationMs: 1000 });
     const first = notifier.show({ message: 'First' });
     const second = notifier.show({ message: 'Second' });
-    const root = document.body.firstElementChild?.shadowRoot;
+    const root = document.querySelector<HTMLElement>('[data-st-toast-host]')?.shadowRoot;
 
     expect(root?.querySelectorAll('.toast')).toHaveLength(1);
     expect(root?.querySelector('.title')?.textContent).toBe('First');
@@ -73,16 +91,16 @@ describe('createNotifier', () => {
     notifier.destroy();
 
     await Promise.all([first.closed, second.closed]);
-    expect(document.body.children).toHaveLength(0);
+    expect(document.querySelector('[data-st-toast-host]')).toBeNull();
     await vi.runAllTimersAsync();
-    expect(document.body.children).toHaveLength(0);
+    expect(document.querySelector('[data-st-toast-host]')).toBeNull();
   });
 
   it('exposes polite, assertive, and off announcement behavior', () => {
     const notifier = createNotifier();
     notifier.show({ message: 'Saved', announcement: 'assertive' });
     notifier.show({ message: 'Quiet', announcement: 'off' });
-    const root = document.body.firstElementChild?.shadowRoot;
+    const root = document.querySelector<HTMLElement>('[data-st-toast-host]')?.shadowRoot;
 
     expect(root?.querySelector('.assertive')?.textContent).toBe('Info: Saved');
     expect(root?.querySelector('.polite')?.textContent).toBe('');
@@ -94,8 +112,9 @@ describe('createNotifier', () => {
   it('uses only opacity for Whisper animation and exposes reduced-motion CSS', () => {
     const notifier = createNotifier();
     notifier.show({ message: 'Sharp text' });
-    const css = document.body.firstElementChild?.shadowRoot?.querySelector('style')
-      ?.textContent;
+    const css = document
+      .querySelector<HTMLElement>('[data-st-toast-host]')
+      ?.shadowRoot?.querySelector('style')?.textContent;
 
     expect(css).toContain(
       '@keyframes whisper-life{0%,100%{opacity:0}8%,82%{opacity:1}}',
