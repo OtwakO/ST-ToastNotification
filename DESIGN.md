@@ -17,7 +17,7 @@
 
 - Present the notification as independently centered typography between two decorative hairlines over a shallow “ink veil,” not a conventional solid alert box. The veil uses a near-black neutral base, warm soft-beige illumination from above and below, no visible border, and soft offset depth. A horizontal mask fades the whole veil toward transparent side edges while leaving content fully opaque. Semantic hue does not tint the surface.
 - Use an elegant serif voice for Latin text and bundled Noto Sans regional fonts for Chinese: `Noto Sans SC Variable` for `zh-CN`/`zh-SG`, and `Noto Sans TC Variable` for `zh-TW`/`zh-HK`/`zh-Hant`.
-- Latin title text may use a restrained italic; CJK text remains upright and semibold to preserve stroke clarity.
+- Latin title text may use a restrained italic; CJK text remains upright. Traditional Chinese uses semibold at the base title size, while Simplified Chinese is optically balanced at one size step smaller and Medium weight because the selected SC build appears denser at identical CSS metrics.
 - Bundle Fontsource's Unicode-partitioned variable WOFF2 assets locally. Keep them outside the portable core's mandatory payload and load only the regional stylesheet needed by the active language in production.
 - Never apply blur, `filter`, backdrop blur, text shadow, scale, or transform to Whisper's glyph-bearing subtree. Center through container layout and animate Whisper with opacity only; transform animation can force browser compositor rasterization that softens small text.
 - Render the notification host above ordinary application chrome with an isolated, configurable high stacking layer. The default adapter value is `2147483646`; consumers can override it for hosts that reserve a higher layer.
