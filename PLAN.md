@@ -48,7 +48,7 @@ The project is library-first: a framework-free portable notification module owns
 - **Watch out**: Production must load only the required regional stylesheet and verify CJK rendering in SillyTavern across Windows, macOS, Linux, and browser zoom levels.
 
 ### [2026-07-31] Warning state appeared sharper than other states
-- **Problem**: Whisper centered variable-width messages with `left: 50%` plus `translateX(-50%)` and animated scale on the glyph-bearing element, causing message-dependent fractional-pixel and compositor text rasterization differences.
-- **Fix**: Replaced transform-based horizontal centering with full-width flex layout and removed scale from the animation; glyphs now move vertically and fade only. Supporting text remains state-neutral and semantic rules retain normalized OKLCH accents.
+- **Problem**: Whisper used transforms on ancestors of its glyphs, causing message-dependent fractional alignment and then universal compositor softening after horizontal centering was moved to a full-width transformed parent.
+- **Fix**: Centered with full-width flex layout and gave Whisper an opacity-only animation with no transforms anywhere in its animated subtree. Other prototype styles retain vertical movement.
 - **Affected**: `demo/toast-style-prototype/index.html`, `DESIGN.md`
-- **Watch out**: Verify text sharpness at multiple device-pixel ratios, browser zoom levels, and message widths.
+- **Watch out**: Verify text sharpness at multiple device-pixel ratios, browser zoom levels, and message widths; do not reintroduce transforms to Whisper animation.

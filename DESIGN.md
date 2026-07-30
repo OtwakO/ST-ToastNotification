@@ -19,7 +19,7 @@
 - Use an elegant serif voice for Latin text and bundled Noto Sans regional fonts for Chinese: `Noto Sans SC Variable` for `zh-CN`/`zh-SG`, and `Noto Sans TC Variable` for `zh-TW`/`zh-HK`/`zh-Hant`.
 - Latin title text may use a restrained italic; CJK text remains upright and semibold to preserve stroke clarity.
 - Bundle Fontsource's Unicode-partitioned variable WOFF2 assets locally. Keep them outside the portable core's mandatory payload and load only the regional stylesheet needed by the active language in production.
-- Never apply blur, `filter`, text shadow, scale, or horizontal transform centering to the glyph-bearing element. Center through container layout and animate only vertical movement plus opacity so message-dependent widths do not land text on different fractional pixels.
+- Never apply blur, `filter`, text shadow, scale, or transform to Whisper's glyph-bearing subtree. Center through container layout and animate Whisper with opacity only; transform animation can force browser compositor rasterization that softens small text.
 - Info, Success, Warning, and Error remain distinguishable through message wording, assistive semantics, and accent rules—not color alone.
 - Semantic accents use a shared perceptual lightness so no state appears sharper or more prominent solely because of hue. Accent color belongs on the rules; title and supporting text use state-independent foreground colors.
 - Supporting text must remain at least 10px for CJK in the compact preset; production implementation should use scalable `rem` tokens and verify browser zoom behavior.
