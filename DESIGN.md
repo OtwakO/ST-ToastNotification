@@ -2,7 +2,7 @@
 
 ## Status
 
-The default visual preset is intentionally undecided. A throwaway prototype will compare several notification systems in a simulated SillyTavern chat before production tokens are committed.
+**Whisper** is the selected first visual preset. The remaining prototype directions are exploration material, not committed production styles.
 
 ## Durable rules
 
@@ -13,6 +13,15 @@ The default visual preset is intentionally undecided. A throwaway prototype will
 - The renderer owns stable structure; themes customize documented tokens rather than arbitrary internal markup.
 - Host-page styles must not leak into notifications, and notification styles must not leak into SillyTavern.
 
-## Pending decision
+## Whisper preset
 
-The initial preset, palette, typography, surface treatment, icon language, and exact motion curve will be recorded after prototype selection.
+- Present the notification as centered typography between two fine semantic-accent rules, without a conventional container surface.
+- Use an elegant serif voice for Latin text and an explicit CJK serif stack for Chinese: `Noto Serif SC`, `Source Han Serif SC`, `Songti SC`, then `SimSun`.
+- Latin title text may use a restrained italic; CJK text remains upright and semibold to preserve stroke clarity.
+- Never apply blur, `filter`, or text shadow to the glyph-bearing element. Depth belongs on surrounding decoration, not text rasterization.
+- Info, Success, Warning, and Error remain distinguishable through message wording, assistive semantics, and accent rules—not color alone.
+- Supporting text must remain at least 10px for CJK in the compact preset; production implementation should use scalable `rem` tokens and verify browser zoom behavior.
+
+## Pending decisions
+
+The exact production palette, spacing tokens, responsive type scale, and motion curve will be settled during implementation and browser verification.

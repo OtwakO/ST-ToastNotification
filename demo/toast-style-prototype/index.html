@@ -106,13 +106,15 @@
 
     /* Whisper: typography and a hairline; almost no container. */
     body[data-variant="whisper"] .toast { --enter-y: -6px; }
-    body[data-variant="whisper"] .toast-inner { gap: 10px; padding: 9px 4px; color: #f2eef4; text-shadow: 0 2px 12px #000; filter: drop-shadow(0 8px 12px rgba(0,0,0,.45)); }
+    body[data-variant="whisper"] .toast-inner { gap: 10px; padding: 9px 4px; color: #f2eef4; }
     body[data-variant="whisper"] .toast-inner::before, body[data-variant="whisper"] .toast-inner::after { content: ""; width: clamp(20px, 4vw, 54px); height: 1px; background: linear-gradient(90deg, transparent, var(--tone)); }
     body[data-variant="whisper"] .toast-inner::after { transform: scaleX(-1); }
     body[data-variant="whisper"] .icon { display: none; }
     body[data-variant="whisper"] .copy { text-align: center; }
-    body[data-variant="whisper"] .title { font-family: Georgia, serif; font-size: 14px; font-style: italic; letter-spacing: .025em; }
-    body[data-variant="whisper"] .detail { display: block; margin-top: 2px; color: var(--tone); font-size: 8px; font-style: normal; letter-spacing: .08em; text-transform: uppercase; }
+    body[data-variant="whisper"] .title { font-family: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", SimSun, serif; font-size: 14px; font-style: italic; letter-spacing: .025em; }
+    body[data-variant="whisper"] .title:lang(zh-CN) { font-style: normal; font-weight: 600; letter-spacing: .04em; }
+    body[data-variant="whisper"] .detail { display: block; margin-top: 3px; color: var(--tone); font-size: 10px; font-style: normal; letter-spacing: .06em; }
+    body[data-variant="whisper"] .detail:lang(en) { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
     body[data-variant="whisper"] .kind { display: none; }
 
     .switcher { position: fixed; z-index: 50; left: 50%; bottom: 16px; transform: translateX(-50%); display: grid; grid-template-columns: 38px minmax(170px, auto) 38px; align-items: center; overflow: hidden; border: 1px solid #5a5561; border-radius: 999px; background: #0d0c10; box-shadow: 0 12px 32px rgba(0,0,0,.45); }
@@ -241,8 +243,11 @@
 
     function showToast(message, supportingText, tone = 'info') {
       currentTone = tone;
+      const language = /[\u3400-\u9fff]/u.test(`${message}${supportingText}`) ? 'zh-CN' : 'en';
       title.textContent = message;
+      title.lang = language;
       detail.textContent = supportingText;
+      detail.lang = language;
       kind.textContent = toneLabels[tone];
       icon.innerHTML = toneIcons[tone];
       toast.dataset.tone = tone;
