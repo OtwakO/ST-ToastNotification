@@ -56,7 +56,7 @@
     .sample-button[data-tone="warning"] span { color: #edcf8d; }
     .sample-button[data-tone="error"] span { color: #efaaa6; }
 
-    .toast-layer { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
+    .toast-layer { position: fixed; inset: 0; z-index: 2147483646; pointer-events: none; isolation: isolate; }
     .toast { --enter-y: -14px; --tone: oklch(78% .075 250); --tone-soft: rgba(185,200,220,.18); position: absolute; top: max(76px, calc(env(safe-area-inset-top) + 68px)); left: 0; right: 0; display: flex; justify-content: center; padding-inline: 17px; opacity: 0; transform: translateY(var(--enter-y)); }
     .toast[data-tone="success"] { --tone: oklch(78% .075 150); --tone-soft: rgba(157,215,178,.18); }
     .toast[data-tone="warning"] { --tone: oklch(78% .075 80); --tone-soft: rgba(231,199,126,.18); }
@@ -110,9 +110,13 @@
     body[data-variant="whisper"] .toast { transform: none; }
     body[data-variant="whisper"] .toast.is-visible { animation-name: whisper-life; }
     @keyframes whisper-life { 0% { opacity: 0; } 12%, 76% { opacity: 1; } 100% { opacity: 0; } }
-    body[data-variant="whisper"] .toast-inner { gap: 10px; padding: 9px 4px; color: #f2eef4; }
-    body[data-variant="whisper"] .toast-inner::before, body[data-variant="whisper"] .toast-inner::after { content: ""; width: clamp(20px, 4vw, 54px); height: 1px; background: linear-gradient(90deg, transparent, var(--tone)); }
-    body[data-variant="whisper"] .toast-inner::after { transform: scaleX(-1); }
+    body[data-variant="whisper"] .toast-inner { position: relative; gap: 12px; min-width: min(360px, calc(100vw - 34px)); padding: 11px 20px; overflow: hidden; border: 1px solid color-mix(in srgb, var(--tone) 18%, rgba(255,255,255,.12)); border-radius: 13px 13px 18px 18px; color: #f2eef4; background:
+      radial-gradient(ellipse at 50% 125%, color-mix(in srgb, var(--tone) 13%, transparent), transparent 62%),
+      linear-gradient(110deg, rgba(255,255,255,.035), transparent 32%, transparent 68%, rgba(255,255,255,.025)),
+      rgba(18, 16, 23, .96);
+      box-shadow: 0 10px 26px rgba(0,0,0,.42), 0 2px 7px rgba(0,0,0,.3), inset 0 1px rgba(255,255,255,.055); }
+    body[data-variant="whisper"] .toast-inner::before, body[data-variant="whisper"] .toast-inner::after { content: ""; flex: 1 1 46px; min-width: 22px; max-width: 58px; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--tone) 72%, white)); }
+    body[data-variant="whisper"] .toast-inner::after { background: linear-gradient(90deg, color-mix(in srgb, var(--tone) 72%, white), transparent); }
     body[data-variant="whisper"] .icon { display: none; }
     body[data-variant="whisper"] .copy { text-align: center; }
     body[data-variant="whisper"] .title { font-family: Georgia, serif; font-size: 14px; font-style: italic; letter-spacing: .025em; }
