@@ -15,11 +15,12 @@ The project is library-first: a framework-free portable notification module owns
 3. **Portable module** — complete for the first checkpoint; the renderer, FIFO queue, lifecycle, accessibility behavior, and Whisper token contract are tested and built.
 4. **Distribution adapters** — complete; ESM/UMD builds and global/custom-event bridges use the same notifier interface.
 5. **SillyTavern adapter** — implementation complete; manifest entry, minimal persistent settings, native controls, preview/reset actions, bridges, and local bundled fonts are packaged.
-6. **Verification and documentation** — verify browser and SillyTavern behavior, performance constraints, accessibility, builds, and usage documentation.
+6. **Generic theme packs** — active; migrate Whisper into the same generated, declarative pack contract used by every bundled theme.
+7. **Verification and documentation** — verify browser and SillyTavern behavior, performance constraints, accessibility, theme-pack builds, and usage documentation.
 
 ## Current state
 
-- **Active phase**: SillyTavern adapter.
+- **Active phase**: Generic theme packs.
 - **Completed**: Repository setup; product scope; library-first architecture; TypeScript, Shadow DOM, distribution, accessibility, adapter, and default-position decisions.
 - **Completed**: User selected Whisper as the first production preset. Its durable typography and clarity rules are recorded in `DESIGN.md`.
 - **Completed**: Corrected CJK blur and selected Fontsource Noto Sans SC/TC variable WOFF2 distributions for consistent regional Chinese rendering.
@@ -28,8 +29,9 @@ The project is library-first: a framework-free portable notification module owns
 - **Completed**: Added the minimal TypeScript/Vitest/Vite foundation, lazy singleton and factory APIs, Shadow DOM renderer, FIFO queue, lifecycle controls, live announcements, Whisper CSS, notifier-level configuration, ESM/UMD builds, and declarations.
 - **Completed**: Added tested namespaced-global and `st-toast:show` DOM custom-event bridges with cleanup and no renderer duplication.
 - **Completed**: Added the native-control SillyTavern adapter with minimal validated persistence, Preview and Reset actions, adapter cleanup, root install artifacts, and a self-contained generated extension package with local CJK fonts.
-- **In progress**: Real SillyTavern installation and browser compatibility verification.
-- **Next**: Verify extension activation, settings persistence, preview rendering, bridge invocation, CJK font requests, mobile layout, zoom, and reduced motion in a supported SillyTavern client.
+- **Completed**: Confirmed the theme-pack architecture: automatic build discovery plus editable full catalog entries, declarative named-slot templates, scoped CSS, schema-generated native controls, per-theme overrides, bundled packs first, and build failure for invalid packs.
+- **In progress**: Remove every Whisper-specific production code path and migrate Whisper into an ordinary file-based theme pack selected only as the catalog default.
+- **Next**: Prove another valid dropped pack is discovered and rendered without TypeScript changes, then resume real SillyTavern compatibility verification.
 - **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
 
 ## Open questions
@@ -42,7 +44,7 @@ The project is library-first: a framework-free portable notification module owns
 - Arbitrary caller-supplied renderer markup in the first release.
 - A runtime CDN dependency for the installed SillyTavern extension.
 - Publishing to SillyTavern extension registries before implementation and verification.
-- User-created presets, preset import/export, or a saved preset library.
+- Theme creation through the settings UI, preset import/export, or a saved user preset library.
 - Per-notification visual overrides; appearance is configured at notifier/extension level.
 - Queue coalescing and arbitrary notification markup.
 

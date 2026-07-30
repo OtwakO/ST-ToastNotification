@@ -10,7 +10,7 @@
 - The visual footprint stays compact and content-driven rather than resembling a full-width system banner.
 - Entry and exit motion is quiet and purposeful, with a reduced-motion equivalent.
 - Meaning is legible without relying on color alone.
-- The renderer owns stable structure; themes customize documented tokens rather than arbitrary internal markup.
+- The renderer owns lifecycle and accessibility structure; each validated theme pack supplies declarative named-slot markup, scoped CSS, and documented tokens through the same generic contract.
 - Host-page styles must not leak into notifications, and notification styles must not leak into SillyTavern.
 
 ## Whisper preset
@@ -28,6 +28,8 @@
 
 ## V1 customization contract
 
-Whisper exposes notifier-level values for primary, accent 1–3, foreground, muted foreground, title font size, and detail font size. The SillyTavern settings surface uses native color, range/number, and select controls. Values apply to the active notifier rather than individual notifications.
+Each bundled theme manifest declares its editable tokens. The SillyTavern settings surface generates native color, range/number, select, or checkbox controls from those declarations and stores overrides independently per theme. Values apply to the active notifier rather than individual notifications.
 
-V1 does not include custom preset creation, preset saving, preset import/export, or arbitrary per-notification styling. Additional built-in presets can reuse the same contract later.
+Whisper declares its current six colors and title/detail sizes through that generic manifest. It is the default selected theme, not a special renderer implementation.
+
+V1 does not include runtime theme downloading, theme creation through settings, remote packs, theme JavaScript, or arbitrary per-notification styling.

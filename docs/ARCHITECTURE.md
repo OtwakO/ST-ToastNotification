@@ -5,14 +5,17 @@
 ST-ToastNotification is a library-first repository with a thin SillyTavern adapter. The portable notification module is the product core; SillyTavern installation and settings are consumers of that module rather than dependencies of it.
 
 ```text
+themes/              Declarative theme packs and editable catalog data
 src/
+├── generated/       Build-generated embedded theme catalog
 ├── toast/           Portable renderer and its public interface
-├── themes/          Built-in theme definitions using the stable theme contract
+├── themes/          Generic catalog, template, and token modules
 └── sillytavern/     SillyTavern settings, lifecycle, and invocation adapters
+scripts/themes/      Theme discovery, validation, and catalog generation
 demo/                Standalone visual and integration showcase
 dist/                Generated browser artifacts
-index.js              Generated SillyTavern manifest entry
-manifest.json         SillyTavern extension metadata
+index.js             Generated SillyTavern manifest entry
+manifest.json        SillyTavern extension metadata
 ```
 
 The exact source files may be refined during implementation, but these three module seams must remain distinct.
@@ -41,11 +44,15 @@ The notifier owns DOM creation, queueing, timing, accessibility announcements, p
 
 No adapter implements its own renderer or theme behavior.
 
-## Theme contract
+## Theme-pack contract
 
-Structural CSS remains owned by the renderer inside a Shadow DOM root. Built-in presets supply validated tokens. V1 ships Whisper and allows notifier-level customization of six colors plus title and detail font sizes. Presets do not replace renderer markup.
+Every bundled theme is an ordinary file-based pack containing `theme.json`, `template.html`, and `theme.css`. A build step discovers pack folders, validates them, merges editable catalog entries, and embeds the resulting catalog into every runtime build. Whisper is only the initial default catalog entry and has no privileged TypeScript path.
 
-V1 does not support user-created presets, preset import/export, arbitrary third-party registration, or per-notification visual overrides. The SillyTavern adapter persists only the selected built-in preset and current configuration values.
+Templates use validated named data slots. The renderer clones the selected template, inserts caller text with `textContent`, and retains ownership of accessibility, lifecycle, queueing, viewport placement, and live regions. Theme JavaScript, scripts, inline handlers, arbitrary roles, and executable behavior are forbidden.
+
+Theme manifests declare configurable tokens. The SillyTavern adapter generates native controls from those declarations and persists behavior plus per-theme overrides. V1 supports bundled packs only; remote loading, user-authored themes through the settings UI, and per-notification visual overrides remain out of scope.
+
+The ordinary-theme invariant is: deleting `themes/whisper/` and changing only the catalog default to another valid pack must leave generation, rendering, settings, tests, and builds functional without TypeScript edits.
 
 ## Rendering and performance
 
