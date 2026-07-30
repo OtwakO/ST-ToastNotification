@@ -46,12 +46,19 @@
     .prototype-panel { position: fixed; right: 18px; top: 78px; z-index: 20; width: min(290px, calc(100vw - 36px)); padding: 14px; border: 1px solid #3b3742; border-radius: 14px; background: rgba(18, 17, 22, .94); box-shadow: 0 14px 38px rgba(0, 0, 0, .34); backdrop-filter: blur(12px); }
     .prototype-panel h1 { margin: 0 0 4px; font-size: 13px; letter-spacing: -.01em; }
     .prototype-panel p { margin: 0 0 12px; color: #918c98; font-size: 11px; line-height: 1.45; }
-    .samples { display: grid; gap: 7px; }
+    .samples { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
     .sample-button { width: 100%; border: 1px solid #37343d; border-radius: 9px; padding: 8px 10px; text-align: left; color: #c9c5ce; background: #222028; font-size: 11px; cursor: pointer; }
     .sample-button:hover { border-color: #625b6d; color: #fff; }
+    .sample-button span { display: block; margin-bottom: 2px; color: #fff; font-size: 10px; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
+    .sample-button[data-tone="success"] span { color: #a8dfbc; }
+    .sample-button[data-tone="warning"] span { color: #edcf8d; }
+    .sample-button[data-tone="error"] span { color: #efaaa6; }
 
     .toast-layer { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
-    .toast { --enter-y: -14px; position: absolute; top: max(76px, calc(env(safe-area-inset-top) + 68px)); left: 50%; max-width: min(440px, calc(100vw - 34px)); opacity: 0; transform: translate3d(-50%, var(--enter-y), 0) scale(.985); }
+    .toast { --enter-y: -14px; --tone: #b9c8dc; --tone-soft: rgba(185,200,220,.18); position: absolute; top: max(76px, calc(env(safe-area-inset-top) + 68px)); left: 50%; max-width: min(440px, calc(100vw - 34px)); opacity: 0; transform: translate3d(-50%, var(--enter-y), 0) scale(.985); }
+    .toast[data-tone="success"] { --tone: #9dd7b2; --tone-soft: rgba(157,215,178,.18); }
+    .toast[data-tone="warning"] { --tone: #e7c77e; --tone-soft: rgba(231,199,126,.18); }
+    .toast[data-tone="error"] { --tone: #e99a96; --tone-soft: rgba(233,154,150,.18); }
     .toast.is-visible { animation: toast-life 3.6s cubic-bezier(.16, 1, .3, 1) both; }
     @keyframes toast-life { 0% { opacity: 0; transform: translate3d(-50%, var(--enter-y), 0) scale(.985); } 12%, 76% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); } 100% { opacity: 0; transform: translate3d(-50%, -7px, 0) scale(.995); } }
     .toast-inner { display: flex; align-items: center; }
@@ -59,47 +66,54 @@
     .toast .copy { min-width: 0; }
     .toast .title { display: block; white-space: nowrap; }
     .toast .detail { display: none; }
+    .toast .kind { display: none; }
 
     /* Remembered: cinematic caption with restrained ornamental linework. */
     body[data-variant="remembered"] .toast { --enter-y: -10px; }
-    body[data-variant="remembered"] .toast-inner { position: relative; gap: 12px; min-width: 272px; padding: 12px 18px 12px 13px; border: 1px solid rgba(220, 198, 232, .2); border-radius: 13px; color: #f3eaf5; background: rgba(25, 19, 29, .92); box-shadow: 0 16px 42px rgba(5, 3, 8, .42), inset 0 1px rgba(255,255,255,.05); }
-    body[data-variant="remembered"] .toast-inner::after { content: ""; position: absolute; left: 48px; right: 18px; bottom: 0; height: 1px; background: linear-gradient(90deg, rgba(216,174,222,.75), transparent); }
-    body[data-variant="remembered"] .icon { width: 28px; height: 28px; border: 1px solid rgba(216,174,222,.28); border-radius: 50%; color: #d8aedf; }
+    body[data-variant="remembered"] .toast-inner { position: relative; display: grid; grid-template-columns: 30px minmax(190px, 1fr) 30px; gap: 10px; min-width: 300px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--tone) 28%, transparent); border-radius: 13px; color: #f3eaf5; background: rgba(25, 19, 29, .92); box-shadow: 0 16px 42px rgba(5, 3, 8, .42), inset 0 1px rgba(255,255,255,.05); }
+    body[data-variant="remembered"] .toast-inner::after { content: ""; position: absolute; left: 48px; right: 48px; bottom: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--tone), transparent); }
+    body[data-variant="remembered"] .icon { width: 28px; height: 28px; border: 1px solid var(--tone-soft); border-radius: 50%; color: var(--tone); }
+    body[data-variant="remembered"] .copy { text-align: center; }
+    body[data-variant="remembered"] .copy::after { content: ""; width: 30px; }
     body[data-variant="remembered"] .title { font-family: Georgia, "Times New Roman", serif; font-size: 15px; letter-spacing: .015em; }
-    body[data-variant="remembered"] .detail { display: block; margin-top: 2px; color: #a99cab; font-size: 9px; font-weight: 650; letter-spacing: .14em; text-transform: uppercase; }
+    body[data-variant="remembered"] .detail { display: block; margin-top: 2px; color: #a99cab; font-size: 9px; font-weight: 650; letter-spacing: .1em; }
+    body[data-variant="remembered"] .kind { display: block; grid-column: 3; color: var(--tone); text-align: right; font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 
-    /* Moonseal: a small luminous sigil with a suspended caption. */
-    body[data-variant="moonseal"] .toast { --enter-y: -9px; }
-    body[data-variant="moonseal"] .toast-inner { position: relative; gap: 11px; min-width: 248px; padding: 10px 17px 10px 10px; border: 1px solid rgba(174, 203, 231, .24); border-radius: 999px; color: #edf7ff; background: rgba(14, 25, 35, .94); box-shadow: 0 14px 36px rgba(0,0,0,.4), inset 0 1px rgba(255,255,255,.05); }
-    body[data-variant="moonseal"] .icon { position: relative; width: 31px; height: 31px; border-radius: 50%; color: #bfe3f5; background: #213c4b; box-shadow: inset 0 0 0 1px rgba(191,227,245,.18); }
-    body[data-variant="moonseal"] .icon::after { content: ""; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #d8f3ff; box-shadow: 0 3px 8px rgba(0,0,0,.34); }
-    body[data-variant="moonseal"] .icon svg { opacity: .38; }
-    body[data-variant="moonseal"] .title { font-size: 12px; font-weight: 650; letter-spacing: .015em; }
-    body[data-variant="moonseal"] .detail { display: block; margin-top: 2px; color: #91afbd; font-size: 9px; letter-spacing: .06em; }
+    /* Cameo: a small framed portrait-medallion treatment. */
+    body[data-variant="cameo"] .toast-inner { position: relative; gap: 12px; min-width: 268px; padding: 9px 17px 9px 9px; border: 1px solid color-mix(in srgb, var(--tone) 35%, #4b414a); border-radius: 26px 10px 10px 26px; color: #f5edf0; background: #2c242a; box-shadow: 0 14px 34px rgba(0,0,0,.4), inset 0 0 0 3px rgba(255,255,255,.025); }
+    body[data-variant="cameo"] .icon { width: 35px; height: 35px; border: 1px solid var(--tone); border-radius: 50%; color: var(--tone); background: var(--tone-soft); }
+    body[data-variant="cameo"] .title { font-family: Georgia, "Noto Serif SC", serif; font-size: 13px; }
+    body[data-variant="cameo"] .detail { display: block; margin-top: 2px; color: #b8aab0; font-size: 9px; }
+    body[data-variant="cameo"] .kind { display: block; margin-left: auto; color: var(--tone); font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 
-    /* Ribbon: a narrow chapter-marker strip crossing the top of the scene. */
-    body[data-variant="ribbon"] .toast { --enter-y: -18px; }
-    body[data-variant="ribbon"] .toast-inner { position: relative; gap: 10px; min-width: 286px; padding: 10px 20px; border-top: 1px solid rgba(240,212,170,.38); border-bottom: 1px solid rgba(240,212,170,.24); color: #f7ead7; background: rgba(39, 29, 27, .93); box-shadow: 0 14px 30px rgba(0,0,0,.32); clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%); }
-    body[data-variant="ribbon"] .icon { width: 22px; height: 22px; color: #d8b579; }
-    body[data-variant="ribbon"] .title { font-family: Georgia, "Noto Serif SC", serif; font-size: 13px; letter-spacing: .025em; }
-    body[data-variant="ribbon"] .detail { display: block; margin-top: 1px; color: #bca88d; font-size: 9px; }
+    /* Signal: a compact instrument readout with a semantic pulse mark. */
+    body[data-variant="signal"] .toast-inner { position: relative; gap: 10px; min-width: 260px; padding: 10px 14px; border: 1px solid #3b4148; border-radius: 8px; color: #edf0f2; background: #181c20; box-shadow: 0 13px 30px rgba(0,0,0,.38); }
+    body[data-variant="signal"] .toast-inner::before { content: ""; position: absolute; inset: 4px; border: 1px solid rgba(255,255,255,.035); border-radius: 5px; pointer-events: none; }
+    body[data-variant="signal"] .icon { width: 23px; height: 23px; color: var(--tone); }
+    body[data-variant="signal"] .copy { flex: 1; }
+    body[data-variant="signal"] .title { font-size: 12px; font-weight: 680; }
+    body[data-variant="signal"] .detail { display: block; margin-top: 2px; color: #8f979e; font-size: 9px; }
+    body[data-variant="signal"] .kind { display: block; padding: 3px 5px; border: 1px solid var(--tone-soft); border-radius: 4px; color: var(--tone); background: var(--tone-soft); font-size: 8px; font-weight: 800; text-transform: uppercase; }
 
-    /* Echo: concentric traces frame a quiet, centered message. */
-    body[data-variant="echo"] .toast { --enter-y: -5px; }
-    body[data-variant="echo"] .toast-inner { position: relative; justify-content: center; gap: 10px; min-width: 258px; padding: 11px 23px; border: 1px solid rgba(186, 177, 220, .2); border-radius: 14px; color: #f1edf8; background: rgba(24, 22, 32, .93); box-shadow: 0 15px 36px rgba(0,0,0,.36); }
-    body[data-variant="echo"] .toast-inner::before, body[data-variant="echo"] .toast-inner::after { content: ""; position: absolute; inset: 4px; border: 1px solid rgba(186,177,220,.1); border-radius: 10px; pointer-events: none; }
-    body[data-variant="echo"] .toast-inner::after { inset: -4px 12px; border-color: rgba(186,177,220,.08); }
-    body[data-variant="echo"] .icon { width: 21px; height: 21px; color: #c5b9e4; }
-    body[data-variant="echo"] .title { font-size: 12px; font-weight: 570; letter-spacing: .035em; }
-    body[data-variant="echo"] .detail { display: block; margin-top: 2px; color: #91899e; font-size: 9px; }
+    /* Petal: an asymmetric folded note that opens from one corner. */
+    body[data-variant="petal"] .toast { --enter-y: -8px; }
+    body[data-variant="petal"] .toast-inner { position: relative; gap: 11px; min-width: 276px; padding: 11px 18px 11px 13px; border: 1px solid color-mix(in srgb, var(--tone) 24%, #544d5d); border-radius: 5px 18px 18px 18px; color: #f3eff7; background: #292530; box-shadow: 0 14px 34px rgba(0,0,0,.38); }
+    body[data-variant="petal"] .toast-inner::before { content: ""; position: absolute; top: -1px; left: -1px; width: 20px; height: 20px; background: var(--tone-soft); clip-path: polygon(0 0, 100% 0, 0 100%); }
+    body[data-variant="petal"] .icon { width: 25px; height: 25px; color: var(--tone); }
+    body[data-variant="petal"] .title { font-family: Georgia, "Noto Serif SC", serif; font-size: 13px; }
+    body[data-variant="petal"] .detail { display: block; margin-top: 2px; color: #aaa2af; font-size: 9px; }
+    body[data-variant="petal"] .kind { display: block; margin-left: auto; color: var(--tone); font-size: 8px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 
     /* Whisper: typography and a hairline; almost no container. */
     body[data-variant="whisper"] .toast { --enter-y: -6px; }
     body[data-variant="whisper"] .toast-inner { gap: 10px; padding: 9px 4px; color: #f2eef4; text-shadow: 0 2px 12px #000; filter: drop-shadow(0 8px 12px rgba(0,0,0,.45)); }
-    body[data-variant="whisper"] .toast-inner::before, body[data-variant="whisper"] .toast-inner::after { content: ""; width: clamp(20px, 4vw, 54px); height: 1px; background: linear-gradient(90deg, transparent, rgba(232,220,237,.58)); }
+    body[data-variant="whisper"] .toast-inner::before, body[data-variant="whisper"] .toast-inner::after { content: ""; width: clamp(20px, 4vw, 54px); height: 1px; background: linear-gradient(90deg, transparent, var(--tone)); }
     body[data-variant="whisper"] .toast-inner::after { transform: scaleX(-1); }
     body[data-variant="whisper"] .icon { display: none; }
+    body[data-variant="whisper"] .copy { text-align: center; }
     body[data-variant="whisper"] .title { font-family: Georgia, serif; font-size: 14px; font-style: italic; letter-spacing: .025em; }
+    body[data-variant="whisper"] .detail { display: block; margin-top: 2px; color: var(--tone); font-size: 8px; font-style: normal; letter-spacing: .08em; text-transform: uppercase; }
+    body[data-variant="whisper"] .kind { display: none; }
 
     .switcher { position: fixed; z-index: 50; left: 50%; bottom: 16px; transform: translateX(-50%); display: grid; grid-template-columns: 38px minmax(170px, auto) 38px; align-items: center; overflow: hidden; border: 1px solid #5a5561; border-radius: 999px; background: #0d0c10; box-shadow: 0 12px 32px rgba(0,0,0,.45); }
     .switcher button { height: 38px; border: 0; color: #d8d3dd; background: transparent; cursor: pointer; }
@@ -154,22 +168,25 @@
 
   <aside class="prototype-panel" aria-label="Prototype sample controls">
     <h1>Toast style prototype</h1>
-    <p>Replay copy against each visual system. Use the bottom switcher or ← → keys to compare.</p>
+    <p>Compare every visual system across the same four semantic states. Use the bottom switcher or ← → keys.</p>
     <div class="samples">
-      <button class="sample-button" data-message="Memory recalled" data-detail="A detail resurfaced">Memory recalled</button>
-      <button class="sample-button" data-message="4 memories retained" data-detail="Context has been preserved">4 memories retained</button>
-      <button class="sample-button" data-message="This moment will be remembered" data-detail="A new memory was formed">This moment will be remembered</button>
-      <button class="sample-button" data-message="记忆已唤回" data-detail="一段往事重新浮现">记忆已唤回</button>
-      <button class="sample-button" data-message="已保留 4 条记忆" data-detail="这些细节将留在上下文中">已保留 4 条记忆</button>
-      <button class="sample-button" data-message="她会记住这一刻" data-detail="一段新的记忆已经形成">她会记住这一刻</button>
+      <button class="sample-button" data-tone="info" data-message="Memory recalled" data-detail="A detail resurfaced"><span>Info</span>Memory recalled</button>
+      <button class="sample-button" data-tone="success" data-message="4 memories retained" data-detail="Context has been preserved"><span>Success</span>4 memories retained</button>
+      <button class="sample-button" data-tone="warning" data-message="Memory limit approaching" data-detail="Older details may be displaced"><span>Warning</span>Memory limit approaching</button>
+      <button class="sample-button" data-tone="error" data-message="Memory could not be saved" data-detail="The extension will try again"><span>Error</span>Memory could not be saved</button>
+      <button class="sample-button" data-tone="info" data-message="记忆已唤回" data-detail="一段往事重新浮现"><span>信息</span>记忆已唤回</button>
+      <button class="sample-button" data-tone="success" data-message="已保留 4 条记忆" data-detail="这些细节将留在上下文中"><span>成功</span>已保留 4 条记忆</button>
+      <button class="sample-button" data-tone="warning" data-message="记忆容量即将达到上限" data-detail="较早的细节可能会被替换"><span>警告</span>容量即将达到上限</button>
+      <button class="sample-button" data-tone="error" data-message="记忆保存失败" data-detail="扩展稍后将再次尝试"><span>错误</span>记忆保存失败</button>
     </div>
   </aside>
 
   <div class="toast-layer" aria-live="polite" aria-atomic="true">
-    <div class="toast" id="toast">
+    <div class="toast" id="toast" data-tone="info">
       <div class="toast-inner">
-        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+        <span class="icon" aria-hidden="true" id="toast-icon"></span>
         <span class="copy"><span class="title" id="toast-title">Memory recalled</span><span class="detail" id="toast-detail">A detail resurfaced</span></span>
+        <span class="kind" id="toast-kind">Info</span>
       </div>
     </div>
   </div>
@@ -183,14 +200,24 @@
   <script>
     const variants = [
       { id: 'remembered', name: 'Remembered' },
-      { id: 'moonseal', name: 'Moonseal' },
-      { id: 'ribbon', name: 'Ribbon' },
-      { id: 'echo', name: 'Echo' },
+      { id: 'cameo', name: 'Cameo' },
+      { id: 'signal', name: 'Signal' },
+      { id: 'petal', name: 'Petal' },
       { id: 'whisper', name: 'Whisper' },
     ];
     const toast = document.querySelector('#toast');
     const title = document.querySelector('#toast-title');
     const detail = document.querySelector('#toast-detail');
+    const kind = document.querySelector('#toast-kind');
+    const icon = document.querySelector('#toast-icon');
+    const toneLabels = { info: 'Info', success: 'Success', warning: 'Warning', error: 'Error' };
+    const toneIcons = {
+      info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/></svg>',
+      success: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.3 2.3 4.8-5"/></svg>',
+      warning: '<svg viewBox="0 0 24 24"><path d="M10.3 4.7 3.5 17a2 2 0 0 0 1.8 3h13.4a2 2 0 0 0 1.8-3L13.7 4.7a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 16h.01"/></svg>',
+      error: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="m9.5 9.5 5 5M14.5 9.5l-5 5"/></svg>',
+    };
+    let currentTone = 'info';
     let animationTimer;
 
     function selectedIndex() {
@@ -209,12 +236,16 @@
         url.searchParams.set('variant', variant.id);
         history.replaceState({}, '', url);
       }
-      showToast(title.textContent, detail.textContent);
+      showToast(title.textContent, detail.textContent, currentTone);
     }
 
-    function showToast(message, supportingText) {
+    function showToast(message, supportingText, tone = 'info') {
+      currentTone = tone;
       title.textContent = message;
       detail.textContent = supportingText;
+      kind.textContent = toneLabels[tone];
+      icon.innerHTML = toneIcons[tone];
+      toast.dataset.tone = tone;
       toast.classList.remove('is-visible');
       void toast.offsetWidth;
       toast.classList.add('is-visible');
@@ -223,7 +254,7 @@
     }
 
     document.querySelectorAll('[data-message]').forEach(button => {
-      button.addEventListener('click', () => showToast(button.dataset.message, button.dataset.detail));
+      button.addEventListener('click', () => showToast(button.dataset.message, button.dataset.detail, button.dataset.tone));
     });
     document.querySelector('#previous').addEventListener('click', () => applyVariant(selectedIndex() - 1));
     document.querySelector('#next').addEventListener('click', () => applyVariant(selectedIndex() + 1));

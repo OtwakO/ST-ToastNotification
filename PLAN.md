@@ -21,7 +21,7 @@ The project is library-first: a framework-free portable notification module owns
 
 - **Active phase**: Requirements and architecture.
 - **Completed**: Repository setup; product scope; library-first architecture; TypeScript, Shadow DOM, distribution, accessibility, adapter, and default-position decisions.
-- **In progress**: Second user-review round of the throwaway five-variant prototype in `demo/toast-style-prototype/`; Remembered and Whisper were retained, while the middle three directions were replaced and Chinese copy coverage was added.
+- **In progress**: Third user-review round of the throwaway five-variant prototype in `demo/toast-style-prototype/`; Remembered and Whisper remain, Remembered copy is centered, three new middle directions were introduced, and all variants now demonstrate Info, Success, Warning, and Error states in English and Chinese.
 - **Next**: User selects or combines a visual direction; record production design tokens, remove or archive the throwaway prototype as appropriate, then begin TDD implementation.
 - **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
 
