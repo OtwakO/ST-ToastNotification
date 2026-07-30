@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ST Toast — Visual Direction Prototype</title>
+  <link rel="stylesheet" href="../../assets/fonts/noto-sans-sc/index.css">
+  <link rel="stylesheet" href="../../assets/fonts/noto-sans-tc/index.css">
   <style>
     :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     * { box-sizing: border-box; }
@@ -111,8 +113,9 @@
     body[data-variant="whisper"] .toast-inner::after { transform: scaleX(-1); }
     body[data-variant="whisper"] .icon { display: none; }
     body[data-variant="whisper"] .copy { text-align: center; }
-    body[data-variant="whisper"] .title { font-family: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", SimSun, serif; font-size: 14px; font-style: italic; letter-spacing: .025em; }
-    body[data-variant="whisper"] .title:lang(zh-CN) { font-style: normal; font-weight: 600; letter-spacing: .04em; }
+    body[data-variant="whisper"] .title { font-family: Georgia, serif; font-size: 14px; font-style: italic; letter-spacing: .025em; }
+    body[data-variant="whisper"] .title:lang(zh-CN), body[data-variant="whisper"] .detail:lang(zh-CN) { font-family: "Noto Sans SC Variable", "Microsoft YaHei", "PingFang SC", sans-serif; font-style: normal; font-weight: 600; letter-spacing: .04em; }
+    body[data-variant="whisper"] .title:lang(zh-TW), body[data-variant="whisper"] .title:lang(zh-HK), body[data-variant="whisper"] .detail:lang(zh-TW), body[data-variant="whisper"] .detail:lang(zh-HK) { font-family: "Noto Sans TC Variable", "Microsoft JhengHei", "PingFang TC", sans-serif; font-style: normal; font-weight: 600; letter-spacing: .04em; }
     body[data-variant="whisper"] .detail { display: block; margin-top: 3px; color: var(--tone); font-size: 10px; font-style: normal; letter-spacing: .06em; }
     body[data-variant="whisper"] .detail:lang(en) { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
     body[data-variant="whisper"] .kind { display: none; }
@@ -176,10 +179,10 @@
       <button class="sample-button" data-tone="success" data-message="4 memories retained" data-detail="Context has been preserved"><span>Success</span>4 memories retained</button>
       <button class="sample-button" data-tone="warning" data-message="Memory limit approaching" data-detail="Older details may be displaced"><span>Warning</span>Memory limit approaching</button>
       <button class="sample-button" data-tone="error" data-message="Memory could not be saved" data-detail="The extension will try again"><span>Error</span>Memory could not be saved</button>
-      <button class="sample-button" data-tone="info" data-message="记忆已唤回" data-detail="一段往事重新浮现"><span>信息</span>记忆已唤回</button>
-      <button class="sample-button" data-tone="success" data-message="已保留 4 条记忆" data-detail="这些细节将留在上下文中"><span>成功</span>已保留 4 条记忆</button>
-      <button class="sample-button" data-tone="warning" data-message="记忆容量即将达到上限" data-detail="较早的细节可能会被替换"><span>警告</span>容量即将达到上限</button>
-      <button class="sample-button" data-tone="error" data-message="记忆保存失败" data-detail="扩展稍后将再次尝试"><span>错误</span>记忆保存失败</button>
+      <button class="sample-button" data-tone="info" data-lang="zh-CN" data-message="记忆已唤回" data-detail="一段往事重新浮现"><span>信息 · 简体</span>记忆已唤回</button>
+      <button class="sample-button" data-tone="success" data-lang="zh-CN" data-message="已保留 4 条记忆" data-detail="这些细节将留在上下文中"><span>成功 · 简体</span>已保留 4 条记忆</button>
+      <button class="sample-button" data-tone="warning" data-lang="zh-TW" data-message="記憶容量即將達到上限" data-detail="較早的細節可能會被取代"><span>警告 · 繁體</span>容量即將達到上限</button>
+      <button class="sample-button" data-tone="error" data-lang="zh-TW" data-message="記憶儲存失敗" data-detail="擴充功能稍後將再次嘗試"><span>錯誤 · 繁體</span>記憶儲存失敗</button>
     </div>
   </aside>
 
@@ -241,9 +244,9 @@
       showToast(title.textContent, detail.textContent, currentTone);
     }
 
-    function showToast(message, supportingText, tone = 'info') {
+    function showToast(message, supportingText, tone = 'info', requestedLanguage) {
       currentTone = tone;
-      const language = /[\u3400-\u9fff]/u.test(`${message}${supportingText}`) ? 'zh-CN' : 'en';
+      const language = requestedLanguage ?? (/[\u3400-\u9fff]/u.test(`${message}${supportingText}`) ? 'zh-CN' : 'en');
       title.textContent = message;
       title.lang = language;
       detail.textContent = supportingText;
@@ -259,7 +262,7 @@
     }
 
     document.querySelectorAll('[data-message]').forEach(button => {
-      button.addEventListener('click', () => showToast(button.dataset.message, button.dataset.detail, button.dataset.tone));
+      button.addEventListener('click', () => showToast(button.dataset.message, button.dataset.detail, button.dataset.tone, button.dataset.lang));
     });
     document.querySelector('#previous').addEventListener('click', () => applyVariant(selectedIndex() - 1));
     document.querySelector('#next').addEventListener('click', () => applyVariant(selectedIndex() + 1));

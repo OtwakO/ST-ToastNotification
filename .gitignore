@@ -13,6 +13,10 @@ dist/
 build/
 coverage/
 
+# Local source archives (selected font assets are vendored under assets/fonts/)
+noto-sans-sc.zip
+noto-sans-tc.zip
+
 # Editor and operating-system metadata
 .vscode/
 .idea/

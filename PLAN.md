@@ -22,8 +22,9 @@ The project is library-first: a framework-free portable notification module owns
 - **Active phase**: Requirements and architecture.
 - **Completed**: Repository setup; product scope; library-first architecture; TypeScript, Shadow DOM, distribution, accessibility, adapter, and default-position decisions.
 - **Completed**: User selected Whisper as the first production preset. Its durable typography and clarity rules are recorded in `DESIGN.md`.
-- **In progress**: Correcting CJK blur in the throwaway prototype by removing glyph-layer filtering and synthetic italic behavior, then verifying the selected direction.
-- **Next**: Archive the prototype decision and begin TDD implementation of the portable module and Whisper theme.
+- **Completed**: Corrected CJK blur and selected Fontsource Noto Sans SC/TC variable WOFF2 distributions for consistent regional Chinese rendering.
+- **In progress**: Verifying the locally vendored Unicode-range font packs in the Whisper prototype.
+- **Next**: Archive the prototype decision and begin TDD implementation of the portable module and Whisper theme, with regional font stylesheets loaded lazily outside the mandatory core payload.
 - **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
 
 ## Open questions
@@ -42,6 +43,6 @@ The project is library-first: a framework-free portable notification module owns
 
 ### [2026-07-31] Whisper Chinese text appeared blurry
 - **Problem**: The selected Whisper prototype applied `filter: drop-shadow()` and text shadow to the glyph-bearing toast, while italic Georgia forced Chinese through synthesized fallback rendering.
-- **Fix**: Removed glyph-layer filtering and text shadow, added an explicit CJK serif stack with upright semibold Chinese styling, and increased supporting-text size.
-- **Affected**: `demo/toast-style-prototype/index.html`, `DESIGN.md`
-- **Watch out**: Verify actual font availability and CJK rendering in SillyTavern across Windows, macOS, Linux, and browser zoom levels.
+- **Fix**: Removed glyph-layer filtering and text shadow, added upright semibold Chinese styling, increased supporting-text size, and vendored Unicode-partitioned Noto Sans SC/TC variable fonts for consistent availability.
+- **Affected**: `demo/toast-style-prototype/index.html`, `DESIGN.md`, `assets/fonts/`
+- **Watch out**: Production must load only the required regional stylesheet and verify CJK rendering in SillyTavern across Windows, macOS, Linux, and browser zoom levels.
