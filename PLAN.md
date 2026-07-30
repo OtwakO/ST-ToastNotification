@@ -12,21 +12,22 @@ The project is library-first: a framework-free portable notification module owns
 
 1. **Repository setup** — complete; Git, baseline documentation, and GitHub remote are established.
 2. **Requirements and architecture** — complete; Whisper is selected and the minimal v1 settings and public API are fixed.
-3. **Portable module** — active; implement the renderer, queue, lifecycle, accessibility behavior, and preset-token contract test-first.
+3. **Portable module** — complete for the first checkpoint; the renderer, FIFO queue, lifecycle, accessibility behavior, and Whisper token contract are tested and built.
 4. **Distribution adapters** — produce ESM and optional IIFE builds plus global and custom-event bridges over the same interface.
 5. **SillyTavern adapter** — add the manifest entry, persistent settings, preview controls, and local bundled integration.
 6. **Verification and documentation** — verify browser and SillyTavern behavior, performance constraints, accessibility, builds, and usage documentation.
 
 ## Current state
 
-- **Active phase**: Portable module.
+- **Active phase**: Distribution adapters.
 - **Completed**: Repository setup; product scope; library-first architecture; TypeScript, Shadow DOM, distribution, accessibility, adapter, and default-position decisions.
 - **Completed**: User selected Whisper as the first production preset. Its durable typography and clarity rules are recorded in `DESIGN.md`.
 - **Completed**: Corrected CJK blur and selected Fontsource Noto Sans SC/TC variable WOFF2 distributions for consistent regional Chinese rendering.
 - **Completed**: Verified the selected font strategy and text-sharpness constraints in the Whisper prototype.
 - **Completed**: Approved Whisper's borderless warm-beige ink veil with masked transparent side fades and independently opaque centered content as the first preset.
-- **In progress**: Minimal TypeScript project foundation and TDD implementation of the portable notifier and preset-token contract.
-- **Next**: Add thin invocation bridges and a native-control SillyTavern settings adapter over the tested core.
+- **Completed**: Added the minimal TypeScript/Vitest/Vite foundation, lazy singleton and factory APIs, Shadow DOM renderer, FIFO queue, lifecycle controls, live announcements, Whisper CSS, notifier-level configuration, ESM/UMD builds, and declarations.
+- **In progress**: Thin global and custom-event invocation bridges over the tested portable API.
+- **Next**: Add the native-control SillyTavern settings adapter, persisting only selected preset, colors, font sizes, duration, position, and maximum visible count.
 - **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
 
 ## Open questions

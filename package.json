@@ -1,0 +1,31 @@
+{
+  "name": "st-toast-notification",
+  "version": "0.1.0",
+  "description": "Framework-free Shadow DOM toast notifications for browser extensions.",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/st-toast-notification.umd.cjs",
+  "module": "./dist/st-toast-notification.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/st-toast-notification.js",
+      "require": "./dist/st-toast-notification.umd.cjs"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "build": "vite build && tsc -p tsconfig.build.json"
+  },
+  "devDependencies": {
+    "jsdom": "27.4.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.6",
+    "vitest": "4.1.10"
+  }
+}
