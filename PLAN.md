@@ -55,7 +55,7 @@ The project is library-first: a framework-free portable notification module owns
 - **Watch out**: Verify text sharpness at multiple device-pixel ratios, browser zoom levels, and message widths; do not reintroduce transforms to Whisper animation.
 
 ### [2026-07-31] Simplified Chinese appeared larger and heavier
-- **Problem**: Noto Sans SC v40 appeared optically larger and denser than the accepted Noto Sans TC rendering under shared 14px/600 typography.
-- **Fix**: Tuned only `zh-CN` titles to 13px, weight 500, and slightly tighter tracking; retained the approved Traditional Chinese metrics.
+- **Problem**: Noto Sans SC v40 appeared optically larger and denser than the accepted Noto Sans TC rendering under shared typography.
+- **Fix**: A region-specific optical adjustment was tested, then reverted by user preference; SC and TC now share identical size, weight, and tracking settings.
 - **Affected**: `demo/toast-style-prototype/index.html`, `DESIGN.md`
-- **Watch out**: Keep SC and TC optical tuning separate when typography tokens are extracted into the production theme.
+- **Watch out**: Preserve shared SC/TC typography settings unless the product direction explicitly changes.
