@@ -14,7 +14,7 @@ The project is library-first: a framework-free portable notification module owns
 2. **Requirements and architecture** — complete; Whisper is selected and the minimal v1 settings and public API are fixed.
 3. **Portable module** — complete for the first checkpoint; the renderer, FIFO queue, lifecycle, accessibility behavior, and Whisper token contract are tested and built.
 4. **Distribution adapters** — complete; ESM/UMD builds and global/custom-event bridges use the same notifier interface.
-5. **SillyTavern adapter** — add the manifest entry, persistent settings, preview controls, and local bundled integration.
+5. **SillyTavern adapter** — implementation complete; manifest entry, minimal persistent settings, native controls, preview/reset actions, bridges, and local bundled fonts are packaged.
 6. **Verification and documentation** — verify browser and SillyTavern behavior, performance constraints, accessibility, builds, and usage documentation.
 
 ## Current state
@@ -27,14 +27,14 @@ The project is library-first: a framework-free portable notification module owns
 - **Completed**: Approved Whisper's borderless warm-beige ink veil with masked transparent side fades and independently opaque centered content as the first preset.
 - **Completed**: Added the minimal TypeScript/Vitest/Vite foundation, lazy singleton and factory APIs, Shadow DOM renderer, FIFO queue, lifecycle controls, live announcements, Whisper CSS, notifier-level configuration, ESM/UMD builds, and declarations.
 - **Completed**: Added tested namespaced-global and `st-toast:show` DOM custom-event bridges with cleanup and no renderer duplication.
-- **In progress**: Native-control SillyTavern settings adapter, persisting only selected preset, colors, font sizes, duration, position, and maximum visible count.
-- **Next**: Verify the packaged extension inside SillyTavern and finalize installation/integration documentation.
+- **Completed**: Added the native-control SillyTavern adapter with minimal validated persistence, Preview and Reset actions, adapter cleanup, root install artifacts, and a self-contained generated extension package with local CJK fonts.
+- **In progress**: Real SillyTavern installation and browser compatibility verification.
+- **Next**: Verify extension activation, settings persistence, preview rendering, bridge invocation, CJK font requests, mobile layout, zoom, and reduced motion in a supported SillyTavern client.
 - **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
 
 ## Open questions
 
 - Which SillyTavern minimum client version should be declared after integration testing?
-- None. Queue coalescing is deferred beyond v1.
 
 ## Out of scope
 
@@ -65,3 +65,9 @@ The project is library-first: a framework-free portable notification module owns
 - **Fix**: A region-specific optical adjustment was tested, then reverted by user preference; SC and TC now share identical size, weight, and tracking settings.
 - **Affected**: `demo/toast-style-prototype/index.html`, `DESIGN.md`
 - **Watch out**: Preserve shared SC/TC typography settings unless the product direction explicitly changes.
+
+### [2026-07-31] Extension stylesheet was stale after interrupted packaging
+- **Problem**: Moving `style.css` out of the TypeScript entry stopped Vite from emitting it, while an older file remained in `dist/` and made the package appear complete.
+- **Fix**: Added an explicit packaging script that rebuilds an isolated `dist/extension/`, copies manifest and stylesheet assets, vendors the local CJK font pack, and refreshes root `index.js` for direct installation.
+- **Affected**: `vite.config.ts`, `package.json`, `scripts/package-extension.mjs`, `style.css`, `index.js`
+- **Watch out**: Always verify extension artifacts from a clean output directory rather than trusting files left by a previous build.

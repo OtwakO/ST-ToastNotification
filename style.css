@@ -1,0 +1,46 @@
+/* Loads optional regional glyphs and keeps settings controls close to SillyTavern defaults. */
+@import url('./assets/fonts/noto-sans-sc/index.css');
+@import url('./assets/fonts/noto-sans-tc/index.css');
+.st-toast-settings .inline-drawer-content {
+  display: grid;
+  gap: 0.75rem;
+  padding-block: 0.5rem;
+}
+
+.st-toast-settings label {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(8rem, 1.4fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.st-toast-settings input[type='color'] {
+  width: 100%;
+  min-height: 2rem;
+}
+
+.st-toast-color-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 0.75rem;
+}
+
+.st-toast-color-grid label {
+  grid-template-columns: 1fr 3rem;
+}
+
+.st-toast-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (max-width: 520px) {
+  .st-toast-color-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .st-toast-settings label {
+    grid-template-columns: 1fr;
+  }
+}

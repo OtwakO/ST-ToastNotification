@@ -4,7 +4,7 @@ A lightweight, configurable toast module and SillyTavern extension.
 
 ## Status
 
-The portable TypeScript core and the first built-in preset, **Whisper**, are implemented. Thin invocation bridges and the SillyTavern settings adapter are the next phase.
+The portable TypeScript core, **Whisper** preset, invocation bridges, and installable SillyTavern adapter are implemented. Real-client compatibility verification remains before the first release.
 
 ## Local setup
 
@@ -68,6 +68,27 @@ document.dispatchEvent(new CustomEvent('st-toast:show', {
 
 Call `cleanup()` when the consuming extension unloads.
 
+## SillyTavern installation
+
+Install the repository URL through SillyTavern's extension manager:
+
+```text
+https://github.com/OtwakO/ST-ToastNotification
+```
+
+The extension adds a **Toast Notifications** drawer to extension settings. It persists only the selected built-in preset, six colors, title/detail sizes, duration, position, and maximum visible count. Controls use native color pickers, ranges, and selects, with Preview and Reset actions.
+
+Other SillyTavern extensions can invoke it without importing internal files:
+
+```js
+globalThis.STToastNotification.show({
+  message: 'Memory recalled',
+  tone: 'success',
+});
+```
+
+Or dispatch the documented `st-toast:show` event shown above. The adapter never infers another extension's activity automatically.
+
 ## Verify and build
 
 ```bash
@@ -76,4 +97,4 @@ npm test
 npm run build
 ```
 
-Generated ESM, UMD, and TypeScript declaration files are written to `dist/`. The installable SillyTavern adapter is not implemented yet.
+Generated portable ESM, UMD, and TypeScript declaration files are written to `dist/`. A self-contained extension package is generated under `dist/extension/`, while root `manifest.json`, `index.js`, `style.css`, and `assets/fonts/` support direct installation from GitHub.

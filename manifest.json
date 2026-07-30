@@ -1,0 +1,15 @@
+{
+  "display_name": "Toast Notifications",
+  "loading_order": 100,
+  "dependencies": [],
+  "js": "index.js",
+  "css": "style.css",
+  "author": "OtwakO",
+  "version": "0.1.0",
+  "homePage": "https://github.com/OtwakO/ST-ToastNotification",
+  "auto_update": true,
+  "hooks": {
+    "activate": "onActivate",
+    "disable": "onDisable"
+  }
+}
