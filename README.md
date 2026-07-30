@@ -1,10 +1,10 @@
 # ST-ToastNotification
 
-A planned SillyTavern extension for toast notifications.
+A lightweight, configurable toast module and SillyTavern extension.
 
 ## Status
 
-Repository setup is complete or in progress. Functional requirements and architecture will be defined before implementation begins.
+Whisper is approved as the first preset. The portable TypeScript module is entering implementation, followed by thin invocation and SillyTavern settings adapters.
 
 ## Local setup
 

@@ -19,14 +19,18 @@ The exact source files may be refined during implementation, but these three mod
 
 ## Public interface
 
-The portable module exposes one primary constructor and one primary action:
+The portable module exposes a convenient singleton and an optional constructor for isolated instances:
 
 ```ts
+import { toast, createNotifier } from "st-toast-notification";
+
+toast.show({ message: "Memory recalled" });
+
 const notifier = createNotifier(options);
 const handle = notifier.show(notification);
 ```
 
-The notifier owns DOM creation, queueing, timing, accessibility announcements, theme resolution, and cleanup. Callers provide content and intent, not DOM markup or animation steps. The returned handle may support dismissal and lifecycle observation without exposing renderer internals.
+The notifier owns DOM creation, queueing, timing, accessibility announcements, preset resolution, and cleanup. Callers provide content and intent, not DOM markup, animation steps, or per-notification visual overrides. The returned handle supports dismissal without exposing renderer internals.
 
 ## Adapters
 
@@ -39,15 +43,15 @@ No adapter implements its own renderer or theme behavior.
 
 ## Theme contract
 
-Structural CSS remains owned by the renderer inside a Shadow DOM root. Themes supply validated design tokens such as surface, foreground, accent, radius, spacing, typography, shadow, and motion values. Themes do not replace renderer markup in the first release.
+Structural CSS remains owned by the renderer inside a Shadow DOM root. Built-in presets supply validated tokens. V1 ships Whisper and allows notifier-level customization of six colors plus title and detail font sizes. Presets do not replace renderer markup.
 
-Built-in and third-party themes use the same registration path. Per-instance or per-notification token overrides may be supported where they do not weaken validation or accessibility.
+V1 does not support user-created presets, preset import/export, arbitrary third-party registration, or per-notification visual overrides. The SillyTavern adapter persists only the selected built-in preset and current configuration values.
 
 ## Rendering and performance
 
 - Create one fixed host and Shadow DOM root lazily.
 - Keep the host outside SillyTavern layout flow.
-- Animate `opacity` and `transform`; avoid animation-time layout measurements.
+- Presets define constrained motion. Whisper animates opacity only and never transforms its glyph-bearing subtree; avoid animation-time layout measurements.
 - Cap simultaneously visible notifications and queue or coalesce overflow.
 - Remove completed nodes and listeners.
 - Use pointer pass-through unless an explicit interactive notification is introduced later.

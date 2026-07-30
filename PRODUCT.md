@@ -26,17 +26,19 @@ Notifications appear over SillyTavern's chat interface while users read or gener
 
 - TypeScript source with built JavaScript artifacts for browser consumption.
 - Framework-free and runtime-dependency-free portable renderer.
-- Shadow DOM style isolation with documented CSS custom properties and registered themes.
+- Shadow DOM style isolation with documented preset tokens and notifier-level configuration.
 - Preferred CDN consumption uses version-pinned ESM artifacts; the installed extension uses a local bundled artifact and does not require network access.
 - Initial project scope includes the reusable library, a thin SillyTavern adapter with settings and previews, and a standalone visual demo.
 - Default notification position is top-center.
 - The renderer accepts arbitrary caller-provided text and does not infer memory events.
 - The first release exposes ESM, namespaced global, and custom-event invocation when these remain simple adapters over one interface.
-- Notifications must minimize layout work and animate compositor-friendly properties.
+- Notifications must minimize layout work; Whisper uses opacity-only animation to preserve text clarity.
+- V1 persists only selected preset, six color values, title/detail font sizes, duration, position, and maximum visible count.
+- V1 uses native browser settings controls and excludes user-created presets, preset import/export, and per-notification visual overrides.
 
 ## Brand Commitments
 
-The product name is ST-ToastNotification. Notifications should feel non-obtrusive, polished, compact, and suitable for visual-novel-like feedback such as “Memory recalled” or “This moment will be remembered.” The final default visual preset remains undecided pending prototype review.
+The product name is ST-ToastNotification. Notifications should feel non-obtrusive, polished, compact, and suitable for visual-novel-like feedback such as “Memory recalled” or “This moment will be remembered.” Whisper is the first and default visual preset.
 
 ## Evidence on Hand
 

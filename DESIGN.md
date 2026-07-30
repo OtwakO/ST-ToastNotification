@@ -26,6 +26,8 @@
 - Decorative rules are absolutely positioned and never participate in content layout. The copy occupies a full-width centered grid cell so its alignment is independent of rule length, language, and message width.
 - Supporting text must remain at least 10px for CJK in the compact preset; production implementation should use scalable `rem` tokens and verify browser zoom behavior.
 
-## Pending decisions
+## V1 customization contract
 
-The exact production palette, spacing tokens, responsive type scale, and motion curve will be settled during implementation and browser verification.
+Whisper exposes notifier-level values for primary, accent 1–3, foreground, muted foreground, title font size, and detail font size. The SillyTavern settings surface uses native color, range/number, and select controls. Values apply to the active notifier rather than individual notifications.
+
+V1 does not include custom preset creation, preset saving, preset import/export, or arbitrary per-notification styling. Additional built-in presets can reuse the same contract later.
