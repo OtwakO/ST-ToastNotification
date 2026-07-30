@@ -15,7 +15,7 @@
 
 ## Whisper preset
 
-- Present the notification as independently centered typography between two decorative hairlines over a shallow “ink veil,” not a conventional solid alert box. The veil uses a near-black neutral base, warm soft-beige illumination from above and below, no visible border, and soft offset depth. Semantic hue does not tint the surface.
+- Present the notification as independently centered typography between two decorative hairlines over a shallow “ink veil,” not a conventional solid alert box. The veil uses a near-black neutral base, warm soft-beige illumination from above and below, no visible border, and soft offset depth. A horizontal mask fades the whole veil toward transparent side edges while leaving content fully opaque. Semantic hue does not tint the surface.
 - Use an elegant serif voice for Latin text and bundled Noto Sans regional fonts for Chinese: `Noto Sans SC Variable` for `zh-CN`/`zh-SG`, and `Noto Sans TC Variable` for `zh-TW`/`zh-HK`/`zh-Hant`.
 - Latin title text may use a restrained italic; CJK text remains upright and semibold to preserve stroke clarity.
 - Bundle Fontsource's Unicode-partitioned variable WOFF2 assets locally. Keep them outside the portable core's mandatory payload and load only the regional stylesheet needed by the active language in production.
