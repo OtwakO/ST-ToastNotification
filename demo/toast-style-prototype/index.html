@@ -110,19 +110,21 @@
     body[data-variant="whisper"] .toast { transform: none; }
     body[data-variant="whisper"] .toast.is-visible { animation-name: whisper-life; }
     @keyframes whisper-life { 0% { opacity: 0; } 12%, 76% { opacity: 1; } 100% { opacity: 0; } }
-    body[data-variant="whisper"] .toast-inner { position: relative; gap: 12px; min-width: min(360px, calc(100vw - 34px)); padding: 11px 20px; overflow: hidden; border: 1px solid color-mix(in srgb, var(--tone) 18%, rgba(255,255,255,.12)); border-radius: 13px 13px 18px 18px; color: #f2eef4; background:
-      radial-gradient(ellipse at 50% 125%, color-mix(in srgb, var(--tone) 13%, transparent), transparent 62%),
-      linear-gradient(110deg, rgba(255,255,255,.035), transparent 32%, transparent 68%, rgba(255,255,255,.025)),
-      rgba(18, 16, 23, .96);
-      box-shadow: 0 10px 26px rgba(0,0,0,.42), 0 2px 7px rgba(0,0,0,.3), inset 0 1px rgba(255,255,255,.055); }
-    body[data-variant="whisper"] .toast-inner::before, body[data-variant="whisper"] .toast-inner::after { content: ""; flex: 1 1 46px; min-width: 22px; max-width: 58px; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--tone) 72%, white)); }
-    body[data-variant="whisper"] .toast-inner::after { background: linear-gradient(90deg, color-mix(in srgb, var(--tone) 72%, white), transparent); }
+    body[data-variant="whisper"] .toast-inner { position: relative; display: grid; place-items: center; min-width: min(360px, calc(100vw - 34px)); min-height: 48px; padding: 11px 76px; overflow: hidden; border: 0; border-radius: 13px 13px 18px 18px; color: #f5f0e8; background:
+      radial-gradient(ellipse at 50% 130%, rgba(224, 204, 170, .19), transparent 64%),
+      radial-gradient(ellipse at 50% -45%, rgba(243, 230, 207, .08), transparent 58%),
+      linear-gradient(110deg, rgba(238, 220, 190, .035), transparent 34%, transparent 66%, rgba(238, 220, 190, .028)),
+      rgba(20, 18, 20, .96);
+      box-shadow: 0 10px 26px rgba(0,0,0,.42), 0 2px 7px rgba(0,0,0,.3), inset 0 1px rgba(244,230,207,.045); }
+    body[data-variant="whisper"] .toast-inner::before, body[data-variant="whisper"] .toast-inner::after { content: ""; position: absolute; top: 50%; width: 48px; height: 1px; pointer-events: none; }
+    body[data-variant="whisper"] .toast-inner::before { left: 18px; background: linear-gradient(90deg, transparent, rgba(229, 207, 172, .62)); }
+    body[data-variant="whisper"] .toast-inner::after { right: 18px; background: linear-gradient(90deg, rgba(229, 207, 172, .62), transparent); }
     body[data-variant="whisper"] .icon { display: none; }
-    body[data-variant="whisper"] .copy { text-align: center; }
+    body[data-variant="whisper"] .copy { width: 100%; text-align: center; }
     body[data-variant="whisper"] .title { font-family: Georgia, serif; font-size: 14px; font-style: italic; letter-spacing: .025em; }
     body[data-variant="whisper"] .title:lang(zh-CN), body[data-variant="whisper"] .detail:lang(zh-CN) { font-family: "Noto Sans SC Variable", "Microsoft YaHei", "PingFang SC", sans-serif; font-style: normal; font-weight: 600; letter-spacing: .04em; }
     body[data-variant="whisper"] .title:lang(zh-TW), body[data-variant="whisper"] .title:lang(zh-HK), body[data-variant="whisper"] .detail:lang(zh-TW), body[data-variant="whisper"] .detail:lang(zh-HK) { font-family: "Noto Sans TC Variable", "Microsoft JhengHei", "PingFang TC", sans-serif; font-style: normal; font-weight: 600; letter-spacing: .04em; }
-    body[data-variant="whisper"] .detail { display: block; margin-top: 3px; color: #d2ccd6; font-size: 10px; font-style: normal; letter-spacing: .06em; }
+    body[data-variant="whisper"] .detail { display: block; margin-top: 3px; color: #d8cec0; font-size: 10px; font-style: normal; letter-spacing: .06em; }
     body[data-variant="whisper"] .detail:lang(en) { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
     body[data-variant="whisper"] .kind { display: none; }
 

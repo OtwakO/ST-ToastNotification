@@ -24,7 +24,7 @@ The project is library-first: a framework-free portable notification module owns
 - **Completed**: User selected Whisper as the first production preset. Its durable typography and clarity rules are recorded in `DESIGN.md`.
 - **Completed**: Corrected CJK blur and selected Fontsource Noto Sans SC/TC variable WOFF2 distributions for consistent regional Chinese rendering.
 - **Completed**: Verified the selected font strategy and text-sharpness constraints in the Whisper prototype.
-- **In progress**: User review of Whisper's stylistic ink-veil background and near-maximum stacking layer.
+- **In progress**: User review of Whisper's borderless warm-beige ink veil and independently centered content.
 - **Next**: Archive the prototype decision and begin TDD implementation of the portable module and Whisper theme, with regional font stylesheets loaded lazily outside the mandatory core payload.
 - **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
 
