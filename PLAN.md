@@ -6,32 +6,37 @@ Build and maintain ST-ToastNotification as a SillyTavern extension. The function
 
 ## Architecture overview
 
-The repository currently contains agent and project-process documentation only. The extension's directory structure, modules, data flow, and public interfaces remain to be designed once functional requirements are defined.
+The project is library-first: a framework-free portable notification module owns rendering, lifecycle, queueing, accessibility, and theme resolution behind a small interface. Theme definitions are separate adapters over a stable token contract. A thin SillyTavern adapter provides settings, previews, and invocation bridges without coupling the renderer to SillyTavern. See `docs/ARCHITECTURE.md`.
 
 ## Implementation phases
 
-1. **Repository setup** — initialize Git, establish baseline documentation, and connect the GitHub remote.
-2. **Requirements and architecture** — define notification behavior, SillyTavern integration points, directory structure, data flow, and interface contracts.
-3. **Implementation** — build the smallest functional extension slice using test-driven development where applicable.
-4. **Verification and documentation** — run tests and checks, document setup and usage, and verify the extension in SillyTavern.
+1. **Repository setup** — complete; Git, baseline documentation, and GitHub remote are established.
+2. **Requirements and architecture** — in progress; core module and distribution decisions are documented, while the initial visual preset is being selected through a throwaway prototype.
+3. **Portable module** — implement the renderer, queue, lifecycle, accessibility behavior, and theme contract test-first.
+4. **Distribution adapters** — produce ESM and optional IIFE builds plus global and custom-event bridges over the same interface.
+5. **SillyTavern adapter** — add the manifest entry, persistent settings, preview controls, and local bundled integration.
+6. **Verification and documentation** — verify browser and SillyTavern behavior, performance constraints, accessibility, builds, and usage documentation.
 
 ## Current state
 
-- **Active phase**: Repository setup.
-- **In progress**: Initializing the local Git repository and connecting it to GitHub.
-- **Next**: Define requirements and architecture before implementation.
-- **Environment**: GitHub repository `OtwakO/ST-ToastNotification` exists and is initially empty.
+- **Active phase**: Requirements and architecture.
+- **Completed**: Repository setup; product scope; library-first architecture; TypeScript, Shadow DOM, distribution, accessibility, adapter, and default-position decisions.
+- **In progress**: Building a throwaway five-variant HTML/CSS prototype for the initial notification preset.
+- **Next**: User selects or combines a visual direction; record production design tokens, then begin TDD implementation.
+- **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
 
 ## Open questions
 
-- What events should produce toast notifications?
-- What settings and customization should the extension expose?
-- Which SillyTavern APIs and minimum version should be supported?
+- Which prototype direction becomes the initial default preset?
+- Which SillyTavern minimum client version should be declared after integration testing?
+- Should overflow queueing coalesce repeated notifications by caller-provided key in the first release?
 
 ## Out of scope
 
-- Extension implementation before requirements and architecture are agreed.
-- Publishing to SillyTavern extension registries during repository setup.
+- Automatic inference of another extension's memory operations without an explicit call or documented event.
+- Arbitrary caller-supplied renderer markup in the first release.
+- A runtime CDN dependency for the installed SillyTavern extension.
+- Publishing to SillyTavern extension registries before implementation and verification.
 
 ## Issues & Fixes
 
