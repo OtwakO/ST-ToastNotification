@@ -48,7 +48,7 @@ The project is library-first: a framework-free portable notification module owns
 - **Watch out**: Production must load only the required regional stylesheet and verify CJK rendering in SillyTavern across Windows, macOS, Linux, and browser zoom levels.
 
 ### [2026-07-31] Warning state appeared sharper than other states
-- **Problem**: Whisper colored its small supporting text with each semantic hue; the higher perceived clarity of yellow made Warning look less blurry in both English and Chinese.
-- **Fix**: Gave supporting text a state-independent neutral foreground and normalized semantic accent rules to a shared OKLCH lightness and chroma.
+- **Problem**: Whisper centered variable-width messages with `left: 50%` plus `translateX(-50%)` and animated scale on the glyph-bearing element, causing message-dependent fractional-pixel and compositor text rasterization differences.
+- **Fix**: Replaced transform-based horizontal centering with full-width flex layout and removed scale from the animation; glyphs now move vertically and fade only. Supporting text remains state-neutral and semantic rules retain normalized OKLCH accents.
 - **Affected**: `demo/toast-style-prototype/index.html`, `DESIGN.md`
-- **Watch out**: Validate OKLCH rendering and contrast in the minimum supported SillyTavern browser versions.
+- **Watch out**: Verify text sharpness at multiple device-pixel ratios, browser zoom levels, and message widths.
