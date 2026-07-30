@@ -23,6 +23,8 @@ export const toast: Notifier = {
 };
 
 export { createNotifier };
+export { installBridges, TOAST_EVENT_NAME } from './bridges';
+export type { BridgeOptions, ToastBridgeGlobal } from './bridges';
 export { resolveWhisperOptions, whisperDefaults } from './themes/whisper';
 export type {
   NotifierOptions,

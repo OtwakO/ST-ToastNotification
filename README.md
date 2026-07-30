@@ -50,6 +50,24 @@ notifier.show({ message: '4 memories retained', lang: 'en' });
 
 Appearance is configured per notifier. V1 deliberately does not support per-toast styling or user-created presets.
 
+Browser extensions that cannot import the module directly can install the optional bridges:
+
+```ts
+import { installBridges, toast } from 'st-toast-notification';
+
+const cleanup = installBridges(toast);
+```
+
+This exposes `globalThis.STToastNotification.show(input)` and listens for:
+
+```js
+document.dispatchEvent(new CustomEvent('st-toast:show', {
+  detail: { message: 'Memory recalled', tone: 'info' },
+}));
+```
+
+Call `cleanup()` when the consuming extension unloads.
+
 ## Verify and build
 
 ```bash
