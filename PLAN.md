@@ -21,8 +21,8 @@ The project is library-first: a framework-free portable notification module owns
 
 - **Active phase**: Requirements and architecture.
 - **Completed**: Repository setup; product scope; library-first architecture; TypeScript, Shadow DOM, distribution, accessibility, adapter, and default-position decisions.
-- **In progress**: Building a throwaway five-variant HTML/CSS prototype for the initial notification preset.
-- **Next**: User selects or combines a visual direction; record production design tokens, then begin TDD implementation.
+- **In progress**: User review of the throwaway five-variant HTML/CSS prototype in `demo/toast-style-prototype/`.
+- **Next**: User selects or combines a visual direction; record production design tokens, remove or archive the throwaway prototype as appropriate, then begin TDD implementation.
 - **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
 
 ## Open questions

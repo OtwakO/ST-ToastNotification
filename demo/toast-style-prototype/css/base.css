@@ -1,0 +1,161 @@
+/* ============================================================================
+   THROWAWAY PROTOTYPE — do not ship.
+   Simulated dark chat environment (original styling, no SillyTavern assets).
+   Purpose: give the five toast variants a believable, populated backdrop so
+   obstruction and contrast can be judged honestly.
+   ========================================================================== */
+
+:root {
+  --bg: #0e1013;
+  --bg-raise: #15181d;
+  --line: rgba(255, 255, 255, 0.07);
+  --ink: #c9cfd8;
+  --ink-dim: #767d89;
+  --accent-aria: #d8b078;
+  --accent-user: #8fb4d8;
+  --topbar-h: 52px;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 620px at 50% -12%, #14171e 0%, var(--bg) 58%) fixed, var(--bg);
+  color: var(--ink);
+  font: 14.5px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Top bar ------------------------------------------------------------ */
+
+.topbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: calc(var(--topbar-h) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(13, 15, 19, 0.86);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  z-index: 10;
+}
+
+.topbar__side { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.topbar__side--right { gap: 4px; }
+
+.topbar__id { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.topbar__name { font-size: 14px; font-weight: 650; color: #e4e7ec; white-space: nowrap; }
+.topbar__sub { font-size: 11px; color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.iconbtn {
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  background: none; border: none; border-radius: 8px;
+  color: #9aa3b2; cursor: default; padding: 0;
+}
+.iconbtn svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.iconbtn svg.fill { fill: currentColor; stroke: none; }
+
+/* ---- Avatars ------------------------------------------------------------ */
+
+.avatar {
+  width: 34px; height: 34px; flex: 0 0 34px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
+}
+.avatar--aria { background: rgba(216, 176, 120, 0.16); color: var(--accent-aria); border: 1px solid rgba(216, 176, 120, 0.4); }
+.avatar--user { background: rgba(143, 180, 216, 0.14); color: var(--accent-user); border: 1px solid rgba(143, 180, 216, 0.35); }
+.avatar--sm { width: 30px; height: 30px; flex-basis: 30px; font-size: 11px; }
+
+/* ---- Chat transcript ---------------------------------------------------- */
+
+.chat {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: calc(var(--topbar-h) + env(safe-area-inset-top, 0px) + 26px) 20px 250px;
+}
+
+.chat-msg {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 12px;
+  padding: 15px 6px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.chat-msg__head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 3px; }
+.chat-msg__name { font-size: 13px; font-weight: 650; }
+.chat-msg--aria .chat-msg__name { color: var(--accent-aria); }
+.chat-msg--user .chat-msg__name { color: var(--accent-user); }
+.chat-msg__time { font-size: 11px; color: var(--ink-dim); margin-left: auto; }
+
+.chat-msg__body p { margin: 0 0 8px; font-size: 14.5px; }
+.chat-msg__body p:last-child { margin-bottom: 0; }
+.chat-msg__body em { color: #a9b1bd; }
+
+.chat-divider {
+  display: flex; align-items: center; gap: 14px;
+  margin: 22px 0 6px;
+  font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.chat-divider::before, .chat-divider::after {
+  content: ""; flex: 1; height: 1px; background: var(--line);
+}
+
+/* ---- Composer ----------------------------------------------------------- */
+
+.composer {
+  position: fixed;
+  inset: auto 0 0 0;
+  background: rgba(17, 19, 25, 0.92);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line);
+  z-index: 20;
+}
+
+.composer__inner {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+  display: flex; align-items: center; gap: 10px;
+}
+
+.composer__input {
+  flex: 1;
+  resize: none;
+  background: #1a1e25;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--ink);
+  font: inherit; font-size: 14px; line-height: 1.4;
+}
+.composer__input::placeholder { color: #5f6672; }
+.composer__input:focus { outline: none; border-color: rgba(143, 180, 216, 0.55); }
+
+.composer__send {
+  width: 40px; height: 40px; flex: 0 0 40px;
+  display: grid; place-items: center;
+  background: rgba(216, 176, 120, 0.14);
+  border: 1px solid rgba(216, 176, 120, 0.4);
+  border-radius: 10px;
+  color: var(--accent-aria); cursor: pointer; padding: 0;
+}
+.composer__send:hover { background: rgba(216, 176, 120, 0.22); }
+.composer__send:focus-visible { outline: 2px solid var(--accent-aria); outline-offset: 2px; }
+.composer__send svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---- Small screens ------------------------------------------------------ */
+
+@media (max-width: 560px) {
+  .topbar__sub { display: none; }
+  .chat { padding-left: 14px; padding-right: 14px; }
+}

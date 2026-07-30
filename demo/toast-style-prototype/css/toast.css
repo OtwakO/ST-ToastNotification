@@ -1,0 +1,63 @@
+/* ============================================================================
+   THROWAWAY PROTOTYPE — do not ship.
+   Shared toast shell: fixed top-center host (raised clear of the top bar and
+   safe areas), structural slots, and the reduced-motion override every
+   variant inherits. Per-variant visuals live in css/variants/*.css.
+   ========================================================================== */
+
+.toast-host {
+  position: fixed;
+  top: max(76px, calc(env(safe-area-inset-top, 0px) + 64px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: 100vw;
+  pointer-events: none; /* notifications never block chat interaction */
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(88vw, 460px);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.toast__message { margin: 0; }
+
+.toast__affordance,
+.toast__suffix { display: flex; align-items: center; flex: 0 0 auto; }
+
+/* Variants with no icon/ornament (e.g. Whisper) collapse their empty slots. */
+.toast__affordance:empty,
+.toast__suffix:empty { display: none; }
+
+.toast svg { display: block; }
+
+/* Screen-reader-only live region (visual toast is aria-hidden). */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Reduced motion: every variant degrades to a plain, quick crossfade. */
+@media (prefers-reduced-motion: reduce) {
+  .toast,
+  .toast * {
+    transition: opacity 0.12s linear !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
+}

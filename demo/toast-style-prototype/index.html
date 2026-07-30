@@ -1,0 +1,230 @@
+<!doctype html>
+<!-- THROWAWAY PROTOTYPE — compares five toast directions; do not promote this code directly to production. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ST Toast — Visual Direction Prototype</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; overflow: hidden; color: #eceaf0; background: #111116; }
+    button { font: inherit; }
+    button:focus-visible { outline: 2px solid #d8c1ff; outline-offset: 3px; }
+
+    .app { min-height: 100vh; display: grid; grid-template-columns: 252px minmax(0, 1fr); background: radial-gradient(circle at 76% 8%, rgba(100, 77, 130, .09), transparent 30%), #15141a; }
+    .sidebar { padding: 22px 16px; border-right: 1px solid #2d2a34; background: #101015; }
+    .brand { display: flex; align-items: center; gap: 11px; margin-bottom: 25px; font-weight: 720; letter-spacing: -.02em; }
+    .brand-mark { width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid #544b62; border-radius: 9px; color: #d8c1ff; }
+    .brand-mark svg, .icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-label { margin: 22px 8px 8px; color: #77727e; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .nav-item { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 11px; border-radius: 9px; color: #a9a5af; font-size: 13px; }
+    .nav-item.active { color: #f2eff6; background: #24212b; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .72; }
+
+    .stage { position: relative; min-width: 0; display: grid; grid-template-rows: 58px minmax(0, 1fr) 92px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid #2b2831; background: rgba(21, 20, 26, .94); }
+    .character { display: flex; align-items: center; gap: 11px; }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #342d3d; color: #cdb8db; font: 600 13px Georgia, serif; }
+    .character strong { display: block; font-size: 13px; }
+    .character span { color: #89848f; font-size: 11px; }
+    .top-actions { display: flex; gap: 8px; }
+    .quiet-button { border: 1px solid #393641; border-radius: 8px; padding: 7px 10px; color: #aaa5b1; background: transparent; font-size: 12px; }
+
+    .chat { overflow: auto; padding: 34px clamp(20px, 7vw, 100px) 60px; scrollbar-color: #3a3641 transparent; }
+    .message { max-width: 760px; margin: 0 auto 30px; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; }
+    .message-copy { color: #c9c5ce; font-family: Georgia, "Times New Roman", serif; font-size: 16px; line-height: 1.72; }
+    .message-copy strong { display: block; margin-bottom: 7px; color: #f0edf3; font: 650 12px Inter, sans-serif; letter-spacing: .02em; }
+    .message.user .avatar { background: #29343c; color: #b7d6dc; }
+    .message.user .message-copy { color: #bfc4ca; }
+
+    .composer { padding: 14px clamp(20px, 7vw, 100px) 18px; border-top: 1px solid #2b2831; background: #141319; }
+    .composer-shell { max-width: 760px; height: 58px; margin: auto; display: flex; align-items: center; gap: 10px; padding: 8px 9px 8px 16px; border: 1px solid #3a3641; border-radius: 15px; background: #1b1a21; }
+    .composer-shell span { flex: 1; color: #6f6b75; font-size: 13px; }
+    .send { width: 39px; height: 39px; border: 0; border-radius: 11px; color: #15131a; background: #cfc2dc; }
+
+    .prototype-panel { position: fixed; right: 18px; top: 78px; z-index: 20; width: min(290px, calc(100vw - 36px)); padding: 14px; border: 1px solid #3b3742; border-radius: 14px; background: rgba(18, 17, 22, .94); box-shadow: 0 14px 38px rgba(0, 0, 0, .34); backdrop-filter: blur(12px); }
+    .prototype-panel h1 { margin: 0 0 4px; font-size: 13px; letter-spacing: -.01em; }
+    .prototype-panel p { margin: 0 0 12px; color: #918c98; font-size: 11px; line-height: 1.45; }
+    .samples { display: grid; gap: 7px; }
+    .sample-button { width: 100%; border: 1px solid #37343d; border-radius: 9px; padding: 8px 10px; text-align: left; color: #c9c5ce; background: #222028; font-size: 11px; cursor: pointer; }
+    .sample-button:hover { border-color: #625b6d; color: #fff; }
+
+    .toast-layer { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
+    .toast { --enter-y: -14px; position: absolute; top: max(76px, calc(env(safe-area-inset-top) + 68px)); left: 50%; max-width: min(440px, calc(100vw - 34px)); opacity: 0; transform: translate3d(-50%, var(--enter-y), 0) scale(.985); }
+    .toast.is-visible { animation: toast-life 3.6s cubic-bezier(.16, 1, .3, 1) both; }
+    @keyframes toast-life { 0% { opacity: 0; transform: translate3d(-50%, var(--enter-y), 0) scale(.985); } 12%, 76% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); } 100% { opacity: 0; transform: translate3d(-50%, -7px, 0) scale(.995); } }
+    .toast-inner { display: flex; align-items: center; }
+    .toast .icon { flex: 0 0 auto; display: grid; place-items: center; }
+    .toast .copy { min-width: 0; }
+    .toast .title { display: block; white-space: nowrap; }
+    .toast .detail { display: none; }
+
+    /* Remembered: cinematic caption with restrained ornamental linework. */
+    body[data-variant="remembered"] .toast { --enter-y: -10px; }
+    body[data-variant="remembered"] .toast-inner { position: relative; gap: 12px; min-width: 272px; padding: 12px 18px 12px 13px; border: 1px solid rgba(220, 198, 232, .2); border-radius: 13px; color: #f3eaf5; background: rgba(25, 19, 29, .92); box-shadow: 0 16px 42px rgba(5, 3, 8, .42), inset 0 1px rgba(255,255,255,.05); }
+    body[data-variant="remembered"] .toast-inner::after { content: ""; position: absolute; left: 48px; right: 18px; bottom: 0; height: 1px; background: linear-gradient(90deg, rgba(216,174,222,.75), transparent); }
+    body[data-variant="remembered"] .icon { width: 28px; height: 28px; border: 1px solid rgba(216,174,222,.28); border-radius: 50%; color: #d8aedf; }
+    body[data-variant="remembered"] .title { font-family: Georgia, "Times New Roman", serif; font-size: 15px; letter-spacing: .015em; }
+    body[data-variant="remembered"] .detail { display: block; margin-top: 2px; color: #a99cab; font-size: 9px; font-weight: 650; letter-spacing: .14em; text-transform: uppercase; }
+
+    /* Minimal: tiny, crisp utility status. */
+    body[data-variant="minimal"] .toast-inner { gap: 9px; padding: 9px 13px; border: 1px solid #45434a; border-radius: 9px; color: #f0eff2; background: #232228; box-shadow: 0 10px 26px rgba(0,0,0,.32); }
+    body[data-variant="minimal"] .icon { width: 16px; height: 16px; color: #b9e5c8; }
+    body[data-variant="minimal"] .title { font-size: 12px; font-weight: 620; letter-spacing: -.005em; }
+
+    /* Glass: a real adaptive lens over the chat, not decorative blur alone. */
+    body[data-variant="glass"] .toast-inner { position: relative; overflow: hidden; gap: 11px; padding: 11px 16px 11px 12px; border: 1px solid rgba(255,255,255,.18); border-radius: 18px; color: #fff; background: rgba(51, 49, 62, .55); box-shadow: 0 15px 38px rgba(0,0,0,.28), inset 0 1px rgba(255,255,255,.13); backdrop-filter: blur(18px) saturate(1.3); }
+    body[data-variant="glass"] .toast-inner::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 12% 20%, rgba(209,181,255,.18), transparent 38%); pointer-events: none; }
+    body[data-variant="glass"] .icon { position: relative; width: 30px; height: 30px; border-radius: 11px; color: #eee6ff; background: rgba(255,255,255,.11); }
+    body[data-variant="glass"] .copy { position: relative; }
+    body[data-variant="glass"] .title { font-size: 12px; font-weight: 680; }
+    body[data-variant="glass"] .detail { display: block; margin-top: 2px; color: #c8c1cf; font-size: 10px; }
+
+    /* Archive: an indexed archival slip, compact and informational. */
+    body[data-variant="archive"] .toast-inner { gap: 0; overflow: hidden; border: 1px solid #696052; border-radius: 7px; color: #29251f; background: #ddd3bd; box-shadow: 0 13px 30px rgba(0,0,0,.38); }
+    body[data-variant="archive"] .icon { width: 39px; align-self: stretch; border-right: 1px solid rgba(54,46,36,.25); color: #40372c; background: #c9bda3; }
+    body[data-variant="archive"] .copy { padding: 9px 14px 9px 12px; }
+    body[data-variant="archive"] .title { font-family: Georgia, serif; font-size: 13px; font-weight: 700; }
+    body[data-variant="archive"] .detail { display: block; margin-top: 2px; color: #685e50; font: 700 8px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .12em; text-transform: uppercase; }
+
+    /* Whisper: typography and a hairline; almost no container. */
+    body[data-variant="whisper"] .toast { --enter-y: -6px; }
+    body[data-variant="whisper"] .toast-inner { gap: 10px; padding: 9px 4px; color: #f2eef4; text-shadow: 0 2px 12px #000; filter: drop-shadow(0 8px 12px rgba(0,0,0,.45)); }
+    body[data-variant="whisper"] .toast-inner::before, body[data-variant="whisper"] .toast-inner::after { content: ""; width: clamp(20px, 4vw, 54px); height: 1px; background: linear-gradient(90deg, transparent, rgba(232,220,237,.58)); }
+    body[data-variant="whisper"] .toast-inner::after { transform: scaleX(-1); }
+    body[data-variant="whisper"] .icon { display: none; }
+    body[data-variant="whisper"] .title { font-family: Georgia, serif; font-size: 14px; font-style: italic; letter-spacing: .025em; }
+
+    .switcher { position: fixed; z-index: 50; left: 50%; bottom: 16px; transform: translateX(-50%); display: grid; grid-template-columns: 38px minmax(170px, auto) 38px; align-items: center; overflow: hidden; border: 1px solid #5a5561; border-radius: 999px; background: #0d0c10; box-shadow: 0 12px 32px rgba(0,0,0,.45); }
+    .switcher button { height: 38px; border: 0; color: #d8d3dd; background: transparent; cursor: pointer; }
+    .switcher button:hover { background: #26232b; }
+    .variant-label { padding: 0 15px; text-align: center; color: #aaa5b0; font-size: 11px; }
+    .variant-label strong { color: #fff; font-size: 12px; }
+
+    @media (max-width: 780px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .prototype-panel { top: auto; right: 12px; bottom: 67px; width: 220px; }
+      .prototype-panel p { display: none; }
+      .chat { padding-inline: 18px; }
+      .top-actions .quiet-button:first-child { display: none; }
+      .toast { top: max(70px, calc(env(safe-area-inset-top) + 64px)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .toast.is-visible { animation: toast-life-reduced 3.6s linear both; }
+      @keyframes toast-life-reduced { 0%, 100% { opacity: 0; } 5%, 88% { opacity: 1; } }
+    }
+  </style>
+</head>
+<body data-variant="remembered">
+  <main class="app" aria-label="Simulated SillyTavern chat">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 18 18 6M8 5h11v11M5 9v10h10"/></svg></span> SillyTavern</div>
+      <div class="nav-label">Conversation</div>
+      <div class="nav-item active"><span class="dot"></span> The Observatory</div>
+      <div class="nav-item"><span class="dot"></span> Library at Dusk</div>
+      <div class="nav-item"><span class="dot"></span> New conversation</div>
+      <div class="nav-label">Extensions</div>
+      <div class="nav-item"><span class="dot"></span> Memory</div>
+      <div class="nav-item"><span class="dot"></span> World Info</div>
+      <div class="nav-item"><span class="dot"></span> Character notes</div>
+    </aside>
+
+    <section class="stage">
+      <header class="topbar">
+        <div class="character"><div class="avatar">E</div><div><strong>Evelyn</strong><span>The Observatory · 18 messages</span></div></div>
+        <div class="top-actions"><button class="quiet-button">Character notes</button><button class="quiet-button">•••</button></div>
+      </header>
+      <div class="chat">
+        <article class="message"><div class="avatar">E</div><div class="message-copy"><strong>EVELYN</strong>The brass mechanism turns once beneath her fingers, then catches. Somewhere inside the observatory wall, a second set of gears answers with a soft, deliberate click. “You remembered the sequence,” she says, almost too quietly to hear.</div></article>
+        <article class="message user"><div class="avatar">Y</div><div class="message-copy"><strong>YOU</strong>“Only because you traced it on the table last night.” I keep my hand over the final symbol, waiting for the hidden panel to open.</div></article>
+        <article class="message"><div class="avatar">E</div><div class="message-copy"><strong>EVELYN</strong>Her expression shifts—not surprise exactly, but recognition. The rain works steadily against the dome above us. “Most people forget details they think won’t matter.” The panel slides aside, revealing a narrow compartment lined in faded blue velvet.</div></article>
+      </div>
+      <footer class="composer"><div class="composer-shell"><span>Type a message…</span><button class="send" aria-label="Send message">↑</button></div></footer>
+    </section>
+  </main>
+
+  <aside class="prototype-panel" aria-label="Prototype sample controls">
+    <h1>Toast style prototype</h1>
+    <p>Replay copy against each visual system. Use the bottom switcher or ← → keys to compare.</p>
+    <div class="samples">
+      <button class="sample-button" data-message="Memory recalled" data-detail="A detail resurfaced">Memory recalled</button>
+      <button class="sample-button" data-message="4 memories retained" data-detail="Context has been preserved">4 memories retained</button>
+      <button class="sample-button" data-message="This moment will be remembered" data-detail="A new memory was formed">This moment will be remembered</button>
+    </div>
+  </aside>
+
+  <div class="toast-layer" aria-live="polite" aria-atomic="true">
+    <div class="toast" id="toast">
+      <div class="toast-inner">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+        <span class="copy"><span class="title" id="toast-title">Memory recalled</span><span class="detail" id="toast-detail">A detail resurfaced</span></span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="switcher" aria-label="Prototype variant switcher">
+    <button id="previous" aria-label="Previous variant">←</button>
+    <div class="variant-label"><strong id="variant-name">Remembered</strong><br><span id="variant-count">1 of 5</span></div>
+    <button id="next" aria-label="Next variant">→</button>
+  </nav>
+
+  <script>
+    const variants = [
+      { id: 'remembered', name: 'Remembered' },
+      { id: 'minimal', name: 'Minimal' },
+      { id: 'glass', name: 'Glass' },
+      { id: 'archive', name: 'Archive' },
+      { id: 'whisper', name: 'Whisper' },
+    ];
+    const toast = document.querySelector('#toast');
+    const title = document.querySelector('#toast-title');
+    const detail = document.querySelector('#toast-detail');
+    let animationTimer;
+
+    function selectedIndex() {
+      const requested = new URLSearchParams(location.search).get('variant');
+      const index = variants.findIndex(({ id }) => id === requested);
+      return index === -1 ? 0 : index;
+    }
+
+    function applyVariant(index, updateUrl = true) {
+      const variant = variants[(index + variants.length) % variants.length];
+      document.body.dataset.variant = variant.id;
+      document.querySelector('#variant-name').textContent = variant.name;
+      document.querySelector('#variant-count').textContent = `${variants.indexOf(variant) + 1} of ${variants.length}`;
+      if (updateUrl) {
+        const url = new URL(location.href);
+        url.searchParams.set('variant', variant.id);
+        history.replaceState({}, '', url);
+      }
+      showToast(title.textContent, detail.textContent);
+    }
+
+    function showToast(message, supportingText) {
+      title.textContent = message;
+      detail.textContent = supportingText;
+      toast.classList.remove('is-visible');
+      void toast.offsetWidth;
+      toast.classList.add('is-visible');
+      clearTimeout(animationTimer);
+      animationTimer = setTimeout(() => toast.classList.remove('is-visible'), 3700);
+    }
+
+    document.querySelectorAll('[data-message]').forEach(button => {
+      button.addEventListener('click', () => showToast(button.dataset.message, button.dataset.detail));
+    });
+    document.querySelector('#previous').addEventListener('click', () => applyVariant(selectedIndex() - 1));
+    document.querySelector('#next').addEventListener('click', () => applyVariant(selectedIndex() + 1));
+    addEventListener('keydown', event => {
+      const focused = document.activeElement;
+      if (focused?.matches('input, textarea, [contenteditable="true"]')) return;
+      if (event.key === 'ArrowLeft') applyVariant(selectedIndex() - 1);
+      if (event.key === 'ArrowRight') applyVariant(selectedIndex() + 1);
+    });
+    addEventListener('popstate', () => applyVariant(selectedIndex(), false));
+    applyVariant(selectedIndex(), false);
+  </script>
+</body>
+</html>
