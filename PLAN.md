@@ -24,7 +24,7 @@ The project is library-first: a framework-free portable notification module owns
 - **Completed**: User selected Whisper as the first production preset. Its durable typography and clarity rules are recorded in `DESIGN.md`.
 - **Completed**: Corrected CJK blur and selected Fontsource Noto Sans SC/TC variable WOFF2 distributions for consistent regional Chinese rendering.
 - **In progress**: Verifying the locally vendored Unicode-range font packs in the Whisper prototype.
-- **Next**: Archive the prototype decision and begin TDD implementation of the portable module and Whisper theme, with regional font stylesheets loaded lazily outside the mandatory core payload.
+- **Next**: User verifies normalized Whisper state clarity; then archive the prototype decision and begin TDD implementation of the portable module and Whisper theme, with regional font stylesheets loaded lazily outside the mandatory core payload.
 - **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
 
 ## Open questions
@@ -46,3 +46,9 @@ The project is library-first: a framework-free portable notification module owns
 - **Fix**: Removed glyph-layer filtering and text shadow, added upright semibold Chinese styling, increased supporting-text size, and vendored Unicode-partitioned Noto Sans SC/TC variable fonts for consistent availability.
 - **Affected**: `demo/toast-style-prototype/index.html`, `DESIGN.md`, `assets/fonts/`
 - **Watch out**: Production must load only the required regional stylesheet and verify CJK rendering in SillyTavern across Windows, macOS, Linux, and browser zoom levels.
+
+### [2026-07-31] Warning state appeared sharper than other states
+- **Problem**: Whisper colored its small supporting text with each semantic hue; the higher perceived clarity of yellow made Warning look less blurry in both English and Chinese.
+- **Fix**: Gave supporting text a state-independent neutral foreground and normalized semantic accent rules to a shared OKLCH lightness and chroma.
+- **Affected**: `demo/toast-style-prototype/index.html`, `DESIGN.md`
+- **Watch out**: Validate OKLCH rendering and contrast in the minimum supported SillyTavern browser versions.

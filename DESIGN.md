@@ -21,6 +21,7 @@
 - Bundle Fontsource's Unicode-partitioned variable WOFF2 assets locally. Keep them outside the portable core's mandatory payload and load only the regional stylesheet needed by the active language in production.
 - Never apply blur, `filter`, or text shadow to the glyph-bearing element. Depth belongs on surrounding decoration, not text rasterization.
 - Info, Success, Warning, and Error remain distinguishable through message wording, assistive semantics, and accent rules—not color alone.
+- Semantic accents use a shared perceptual lightness so no state appears sharper or more prominent solely because of hue. Accent color belongs on the rules; title and supporting text use state-independent foreground colors.
 - Supporting text must remain at least 10px for CJK in the compact preset; production implementation should use scalable `rem` tokens and verify browser zoom behavior.
 
 ## Pending decisions
