@@ -1,9 +1,26 @@
-// Owns the lazy Shadow DOM host, toast lifecycle, queue, and announcements.
-import {
-  resolveWhisperOptions,
-  type NotifierOptions,
-  type ResolvedNotifierOptions,
-} from '../themes/whisper';
+// Owns the lazy Shadow DOM host, generic theme rendering, lifecycle, queue, and announcements.
+import { getTheme } from '../themes/catalog';
+import { resolveThemeTokens, tokenCssValue, tokenVariableName } from '../themes/resolve';
+import type { ThemeTokenValue } from '../themes/types';
+
+export type ToastPosition =
+  | 'top-left'
+  | 'top-center'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-center'
+  | 'bottom-right';
+
+export interface NotifierOptions {
+  themeId?: string;
+  themeOverrides?: Record<string, ThemeTokenValue>;
+  durationMs?: number;
+  position?: ToastPosition;
+  maxVisible?: number;
+  zIndex?: number;
+}
+
+export interface ResolvedNotifierOptions extends Required<NotifierOptions> {}
 
 export type ToastTone = 'info' | 'success' | 'warning' | 'error';
 export type ToastAnnouncement = 'polite' | 'assertive' | 'off';
@@ -49,7 +66,11 @@ const toneLabels: Record<ToastTone, string> = {
 };
 
 export function createNotifier(options: NotifierOptions = {}): Notifier {
-  const config = resolveWhisperOptions(options);
+  const config = resolveNotifierOptions(options);
+  const selectedTheme = getTheme(config.themeId);
+  if (!selectedTheme) throw new TypeError(`Unknown theme: ${config.themeId}`);
+  const theme = selectedTheme;
+  const tokens = resolveThemeTokens(theme, config.themeOverrides);
   let sequence = 0;
   let host: HTMLElement | undefined;
   let stack: HTMLElement | undefined;
@@ -70,48 +91,66 @@ export function createNotifier(options: NotifierOptions = {}): Notifier {
     host.style.zIndex = String(config.zIndex);
     host.style.pointerEvents = 'none';
     const root = host.attachShadow({ mode: 'open' });
-    root.innerHTML = `<style>${whisperCss(config)}</style><div class="stack" data-position="${config.position}"></div><div class="live polite" aria-live="polite" aria-atomic="true"></div><div class="live assertive" aria-live="assertive" aria-atomic="true"></div>`;
-    stack = root.querySelector('.stack') as HTMLElement;
-    politeRegion = root.querySelector('.polite') as HTMLElement;
-    assertiveRegion = root.querySelector('.assertive') as HTMLElement;
+    const style = document.createElement('style');
+    style.textContent = structuralCss(theme.css);
+    const nextStack = document.createElement('div');
+    nextStack.className = 'stack';
+    nextStack.dataset.position = config.position;
+    const nextPoliteRegion = document.createElement('div');
+    nextPoliteRegion.className = 'live polite';
+    nextPoliteRegion.setAttribute('aria-live', 'polite');
+    nextPoliteRegion.setAttribute('aria-atomic', 'true');
+    const nextAssertiveRegion = document.createElement('div');
+    nextAssertiveRegion.className = 'live assertive';
+    nextAssertiveRegion.setAttribute('aria-live', 'assertive');
+    nextAssertiveRegion.setAttribute('aria-atomic', 'true');
+    root.append(style, nextStack, nextPoliteRegion, nextAssertiveRegion);
+    for (const [id, value] of Object.entries(tokens)) {
+      (root.host as HTMLElement).style.setProperty(
+        tokenVariableName(id),
+        tokenCssValue(theme, id, value),
+      );
+    }
+    stack = nextStack;
+    politeRegion = nextPoliteRegion;
+    assertiveRegion = nextAssertiveRegion;
     document.documentElement.append(host);
   }
 
   function announce(record: ToastRecord): void {
     if (record.input.announcement === 'off') return;
-    const region =
-      record.input.announcement === 'assertive' ? assertiveRegion : politeRegion;
+    const region = record.input.announcement === 'assertive' ? assertiveRegion : politeRegion;
     if (!region) return;
     region.textContent = accessibleLabel(record.input);
   }
 
   function render(record: ToastRecord): void {
     ensureDom();
+    const template = document.createElement('template');
+    template.innerHTML = theme.template.trim();
+    const root = template.content.firstElementChild;
+    if (!(root instanceof HTMLElement)) throw new Error(`Theme ${theme.id} has no renderable root`);
+    const message = root.querySelector<HTMLElement>('[data-toast-slot="message"]');
+    const detail = root.querySelector<HTMLElement>('[data-toast-slot="detail"]');
+    if (!message) throw new Error(`Theme ${theme.id} has no message slot`);
+    message.textContent = record.input.message;
+    if (record.input.lang) message.lang = record.input.lang;
+    if (detail) {
+      detail.textContent = record.input.detail ?? '';
+      detail.toggleAttribute('hidden', !record.input.detail);
+      if (record.input.lang) detail.lang = record.input.lang;
+    }
+    root.dataset.tone = record.input.tone;
+    root.style.setProperty('--st-toast-tone', record.input.tone);
+    root.setAttribute('role', 'group');
+    root.setAttribute('aria-label', accessibleLabel(record.input));
+    const toneLabel = root.querySelector<HTMLElement>('[data-toast-slot="tone-label"]');
+    if (toneLabel) toneLabel.textContent = toneLabels[record.input.tone];
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.dataset.tone = record.input.tone;
     toast.style.setProperty('--toast-duration', `${record.durationMs}ms`);
-    toast.setAttribute('role', 'group');
+    toast.append(root);
     toast.setAttribute('aria-label', accessibleLabel(record.input));
-
-    const inner = document.createElement('div');
-    inner.className = 'toast-inner';
-    const copy = document.createElement('div');
-    copy.className = 'copy';
-    const title = document.createElement('div');
-    title.className = 'title';
-    title.textContent = record.input.message;
-    if (record.input.lang) title.lang = record.input.lang;
-    copy.append(title);
-    if (record.input.detail) {
-      const detail = document.createElement('div');
-      detail.className = 'detail';
-      detail.textContent = record.input.detail;
-      if (record.input.lang) detail.lang = record.input.lang;
-      copy.append(detail);
-    }
-    inner.append(copy);
-    toast.append(inner);
     stack?.append(toast);
     record.element = toast;
     visible.push(record);
@@ -170,15 +209,33 @@ export function createNotifier(options: NotifierOptions = {}): Notifier {
       };
       if (visible.length < config.maxVisible) render(record);
       else queued.push(record);
-      return {
-        id: record.id,
-        closed,
-        dismiss: () => dismiss(record),
-      };
+      return { id: record.id, closed, dismiss: () => dismiss(record) };
     },
     dismissAll,
     destroy,
   };
+}
+
+function resolveNotifierOptions(options: NotifierOptions): ResolvedNotifierOptions {
+  const resolved = {
+    themeId: options.themeId ?? getTheme()?.id ?? '',
+    themeOverrides: options.themeOverrides ?? {},
+    durationMs: options.durationMs ?? 3600,
+    position: options.position ?? 'top-center',
+    maxVisible: options.maxVisible ?? 3,
+    zIndex: options.zIndex ?? 2147483646,
+  } as ResolvedNotifierOptions;
+  if (!Number.isFinite(resolved.durationMs) || resolved.durationMs <= 0) {
+    throw new RangeError('durationMs must be greater than 0');
+  }
+  if (!Number.isInteger(resolved.maxVisible) || resolved.maxVisible <= 0) {
+    throw new RangeError('maxVisible must be a positive integer');
+  }
+  if (!Number.isInteger(resolved.zIndex) || resolved.zIndex < 0) {
+    throw new RangeError('zIndex must be a non-negative integer');
+  }
+  if (!getTheme(resolved.themeId)) throw new TypeError(`Unknown theme: ${resolved.themeId}`);
+  return resolved;
 }
 
 function validateInput(input: ToastInput, config: ResolvedNotifierOptions): string {
@@ -186,9 +243,7 @@ function validateInput(input: ToastInput, config: ResolvedNotifierOptions): stri
     throw new TypeError('message must be a non-empty string');
   }
   const duration = input.durationMs ?? config.durationMs;
-  if (!Number.isFinite(duration) || duration <= 0) {
-    throw new RangeError('durationMs must be greater than 0');
-  }
+  if (!Number.isFinite(duration) || duration <= 0) throw new RangeError('durationMs must be greater than 0');
   return input.message.trim();
 }
 
@@ -196,6 +251,6 @@ function accessibleLabel(input: Pick<ToastInput, 'message' | 'detail' | 'tone'>)
   return `${toneLabels[input.tone ?? 'info']}: ${input.message}${input.detail ? `. ${input.detail}` : ''}`;
 }
 
-function whisperCss(config: ResolvedNotifierOptions): string {
-  return `:host{all:initial}.stack{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:68px 17px;box-sizing:border-box;pointer-events:none}.stack[data-position^="bottom"]{justify-content:flex-end;padding-bottom:24px}.stack[data-position$="left"]{align-items:flex-start}.stack[data-position$="right"]{align-items:flex-end}.toast{opacity:0;animation:whisper-life var(--toast-duration) ease-in-out both;max-width:min(440px,calc(100vw - 34px));color:${config.foreground}}.toast-inner{position:relative;display:grid;place-items:center;min-width:min(380px,calc(100vw - 34px));min-height:48px;padding:11px 76px;box-sizing:border-box}.toast-inner::before{content:"";position:absolute;z-index:-1;inset:-6px -12px;border-radius:13px 13px 18px 18px;background:radial-gradient(ellipse at 50% 130%,${config.accent1}33,transparent 64%),radial-gradient(ellipse at 50% -45%,${config.accent2}17,transparent 58%),linear-gradient(110deg,${config.accent3}0a,transparent 34%,transparent 66%,${config.accent3}08),${config.primary}f5;box-shadow:0 10px 26px #0006,0 2px 7px #0004,inset 0 1px ${config.accent2}0b;mask-image:linear-gradient(90deg,transparent,#000 28%,#000 72%,transparent)}.copy{position:relative;width:100%;text-align:center}.copy::before,.copy::after{content:"";position:absolute;top:50%;width:48px;height:1px}.copy::before{right:calc(100% + 12px);background:linear-gradient(90deg,transparent,${config.accent1}9e)}.copy::after{left:calc(100% + 12px);background:linear-gradient(90deg,${config.accent1}9e,transparent)}.title{font-family:Georgia,serif;font-size:${config.titleFontSizePx}px;font-style:italic;letter-spacing:.025em}.detail{margin-top:3px;color:${config.mutedForeground};font-family:Georgia,serif;font-size:${config.detailFontSizePx}px;letter-spacing:.06em}.title:lang(zh-CN),.detail:lang(zh-CN){font-family:"Noto Sans SC Variable","Microsoft YaHei","PingFang SC",sans-serif;font-style:normal;font-weight:600;letter-spacing:.04em}.title:lang(zh-TW),.title:lang(zh-HK),.title:lang(zh-Hant),.detail:lang(zh-TW),.detail:lang(zh-HK),.detail:lang(zh-Hant){font-family:"Noto Sans TC Variable","Microsoft JhengHei","PingFang TC",sans-serif;font-style:normal;font-weight:600;letter-spacing:.04em}.live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}@keyframes whisper-life{0%,100%{opacity:0}8%,82%{opacity:1}}@media(prefers-reduced-motion:reduce){.toast{animation:none;opacity:1}}`;
+function structuralCss(themeCss: string): string {
+  return `:host{all:initial}${themeCss}.toast{opacity:0;animation:st-toast-life var(--toast-duration) ease-in-out both;max-width:min(440px,calc(100vw - 34px));}.stack{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:68px 17px;box-sizing:border-box;pointer-events:none}.stack[data-position^="bottom"]{justify-content:flex-end;padding-bottom:24px}.stack[data-position$="left"]{align-items:flex-start}.stack[data-position$="right"]{align-items:flex-end}.live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}@keyframes st-toast-life{0%,100%{opacity:0}8%,82%{opacity:1}}@media(prefers-reduced-motion:reduce){.toast{animation:none;opacity:1}}`;
 }

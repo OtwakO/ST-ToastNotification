@@ -25,12 +25,24 @@ export const toast: Notifier = {
 export { createNotifier };
 export { installBridges, TOAST_EVENT_NAME } from './bridges';
 export type { BridgeOptions, ToastBridgeGlobal } from './bridges';
-export { resolveWhisperOptions, whisperDefaults } from './themes/whisper';
+export { getTheme, listThemes, themeCatalog } from './themes/catalog';
+export { resolveThemeTokens, tokenVariableName } from './themes/resolve';
+export type {
+  ColorToken,
+  NumericToken,
+  SelectToken,
+  BooleanToken,
+  ThemeCatalog,
+  ThemeManifest,
+  ThemePack,
+  ThemeTokenDefinition,
+  ThemeTokenValue,
+} from './themes/types';
 export type {
   NotifierOptions,
   ResolvedNotifierOptions,
   ToastPosition,
-} from './themes/whisper';
+} from './toast/notifier';
 export type {
   Notifier,
   ToastAnnouncement,

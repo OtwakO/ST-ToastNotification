@@ -19,11 +19,12 @@
     }
   },
   "scripts": {
-    "test": "vitest run",
+    "themes:generate": "node scripts/themes/generate-catalog.mjs",
+    "test": "npm run themes:generate && vitest run --passWithNoTests",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "build:library": "vite build && tsc -p tsconfig.build.json",
-    "build:extension": "vite build --mode sillytavern && node scripts/package-extension.mjs",
+    "typecheck": "npm run themes:generate && tsc --noEmit",
+    "build:library": "npm run themes:generate && vite build && tsc -p tsconfig.build.json",
+    "build:extension": "npm run themes:generate && vite build --mode sillytavern && node scripts/package-extension.mjs",
     "build": "npm run build:library && npm run build:extension"
   },
   "devDependencies": {

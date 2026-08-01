@@ -30,20 +30,21 @@ describe('createNotifier', () => {
     const root = document.querySelector<HTMLElement>('[data-st-toast-host]')?.shadowRoot;
     expect(root).not.toBeNull();
     expect(root?.querySelectorAll('.toast')).toHaveLength(1);
-    expect(root?.querySelector('.title')?.textContent).toBe(
+    expect(root?.querySelector('[data-toast-slot="message"]')?.textContent).toBe(
       '<strong>Memory recalled</strong>',
     );
-    expect(root?.querySelector('.detail')?.textContent).toBe(
+    expect(root?.querySelector('[data-toast-slot="detail"]')?.textContent).toBe(
       '<em>A detail resurfaced</em>',
     );
     expect(root?.querySelector('strong')).toBeNull();
-    expect(root?.querySelector('.toast')?.getAttribute('data-tone')).toBe(
+    expect(root?.querySelector('[data-toast-root]')?.getAttribute('data-tone')).toBe(
       'success',
     );
+    expect(root?.querySelector('[data-toast-root]')?.getAttribute('role')).toBe('group');
     expect(root?.querySelector('.toast')?.getAttribute('aria-label')).toBe(
       'Success: <strong>Memory recalled</strong>. <em>A detail resurfaced</em>',
     );
-    expect(root?.querySelector('.title')?.getAttribute('lang')).toBe('zh-CN');
+    expect(root?.querySelector('[data-toast-slot="message"]')?.getAttribute('lang')).toBe('zh-CN');
   });
 
   it('anchors the overlay outside a transformed body for mobile bottom positions', () => {
@@ -70,12 +71,12 @@ describe('createNotifier', () => {
     const root = document.querySelector<HTMLElement>('[data-st-toast-host]')?.shadowRoot;
 
     expect(root?.querySelectorAll('.toast')).toHaveLength(1);
-    expect(root?.querySelector('.title')?.textContent).toBe('First');
+    expect(root?.querySelector('[data-toast-slot="message"]')?.textContent).toBe('First');
 
     first.dismiss();
     await first.closed;
     expect(root?.querySelectorAll('.toast')).toHaveLength(1);
-    expect(root?.querySelector('.title')?.textContent).toBe('Second');
+    expect(root?.querySelector('[data-toast-slot="message"]')?.textContent).toBe('Second');
 
     await vi.advanceTimersByTimeAsync(1000);
     await second.closed;
@@ -109,17 +110,33 @@ describe('createNotifier', () => {
     );
   });
 
-  it('uses only opacity for Whisper animation and exposes reduced-motion CSS', () => {
+  it('applies declared token units through CSS custom properties', () => {
+    const notifier = createNotifier({ themeOverrides: { titleFontSizePx: 16 } });
+    notifier.show({ message: 'Sized text' });
+    const host = document.querySelector<HTMLElement>('[data-st-toast-host]');
+    expect(host?.style.getPropertyValue('--st-token-title-font-size-px')).toBe('16px');
+  });
+
+  it('uses only opacity for the selected theme animation and exposes reduced-motion CSS', () => {
     const notifier = createNotifier();
     notifier.show({ message: 'Sharp text' });
     const css = document
       .querySelector<HTMLElement>('[data-st-toast-host]')
       ?.shadowRoot?.querySelector('style')?.textContent;
 
+    expect(css).toContain(':host{all:initial}');
     expect(css).toContain(
-      '@keyframes whisper-life{0%,100%{opacity:0}8%,82%{opacity:1}}',
+      '@keyframes st-toast-life{0%,100%{opacity:0}8%,82%{opacity:1}}',
     );
     expect(css).toContain('@media(prefers-reduced-motion:reduce)');
     expect(css).not.toMatch(/transform|filter|blur|text-shadow/);
+  });
+
+  it('keeps theme CSS and template content inside the Shadow root', () => {
+    const notifier = createNotifier();
+    notifier.show({ message: 'Safe content' });
+    const host = document.querySelector<HTMLElement>('[data-st-toast-host]');
+    expect(host?.querySelector('img')).toBeNull();
+    expect(host?.shadowRoot?.querySelector('img')).toBeNull();
   });
 });

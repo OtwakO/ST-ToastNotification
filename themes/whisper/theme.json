@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "whisper",
+  "name": "Whisper",
+  "description": "A quiet typographic memory cue.",
+  "tokens": {
+    "primary": {
+      "type": "color",
+      "label": "Primary",
+      "default": "#141214",
+      "legacyKeys": ["primary"]
+    },
+    "accent1": {
+      "type": "color",
+      "label": "Accent 1",
+      "default": "#e0ccaa",
+      "legacyKeys": ["accent1"]
+    },
+    "accent2": {
+      "type": "color",
+      "label": "Accent 2",
+      "default": "#f3e6cf",
+      "legacyKeys": ["accent2"]
+    },
+    "accent3": {
+      "type": "color",
+      "label": "Accent 3",
+      "default": "#eedcbe",
+      "legacyKeys": ["accent3"]
+    },
+    "foreground": {
+      "type": "color",
+      "label": "Text",
+      "default": "#f5f0e8",
+      "legacyKeys": ["foreground"]
+    },
+    "mutedForeground": {
+      "type": "color",
+      "label": "Muted text",
+      "default": "#d8cec0",
+      "legacyKeys": ["mutedForeground"]
+    },
+    "titleFontSizePx": {
+      "type": "range",
+      "label": "Title size",
+      "default": 14,
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "legacyKeys": ["titleFontSizePx"]
+    },
+    "detailFontSizePx": {
+      "type": "range",
+      "label": "Detail size",
+      "default": 10,
+      "min": 8,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "legacyKeys": ["detailFontSizePx"]
+    }
+  }
+}

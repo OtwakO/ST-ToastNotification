@@ -1,0 +1,86 @@
+[data-toast-root] {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: min(380px, calc(100vw - 20px));
+  min-height: 48px;
+  padding: 11px 76px;
+  box-sizing: border-box;
+  color: var(--st-token-foreground);
+}
+
+[data-toast-root]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -6px -12px;
+  border-radius: 13px 13px 18px 18px;
+  background:
+    radial-gradient(ellipse at 50% 130%, color-mix(in srgb, var(--st-token-accent1) 20%, transparent), transparent 64%),
+    radial-gradient(ellipse at 50% -45%, color-mix(in srgb, var(--st-token-accent2) 9%, transparent), transparent 58%),
+    linear-gradient(110deg, color-mix(in srgb, var(--st-token-accent3) 4%, transparent), transparent 34%, transparent 66%, color-mix(in srgb, var(--st-token-accent3) 3%, transparent)),
+    color-mix(in srgb, var(--st-token-primary) 96%, transparent);
+  box-shadow: 0 10px 26px #0006, 0 2px 7px #0004,
+    inset 0 1px color-mix(in srgb, var(--st-token-accent2) 4%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 28%, #000 72%, transparent);
+}
+
+[data-toast-root] .copy {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+[data-toast-root] .copy::before,
+[data-toast-root] .copy::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 48px;
+  height: 1px;
+}
+
+[data-toast-root] .copy::before {
+  right: calc(100% + 12px);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--st-token-accent1) 62%, transparent));
+}
+
+[data-toast-root] .copy::after {
+  left: calc(100% + 12px);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--st-token-accent1) 62%, transparent), transparent);
+}
+
+[data-toast-root] [data-toast-slot="message"] {
+  font-family: Georgia, serif;
+  font-size: var(--st-token-title-font-size-px);
+  font-style: italic;
+  letter-spacing: .025em;
+}
+
+[data-toast-root] [data-toast-slot="detail"] {
+  margin-top: 3px;
+  color: var(--st-token-muted-foreground);
+  font-family: Georgia, serif;
+  font-size: var(--st-token-detail-font-size-px);
+  letter-spacing: .06em;
+}
+
+[data-toast-root] [data-toast-slot="message"]:lang(zh-CN),
+[data-toast-root] [data-toast-slot="detail"]:lang(zh-CN) {
+  font-family: "Noto Sans SC Variable", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+
+[data-toast-root] [data-toast-slot="message"]:lang(zh-TW),
+[data-toast-root] [data-toast-slot="message"]:lang(zh-HK),
+[data-toast-root] [data-toast-slot="message"]:lang(zh-Hant),
+[data-toast-root] [data-toast-slot="detail"]:lang(zh-TW),
+[data-toast-root] [data-toast-slot="detail"]:lang(zh-HK),
+[data-toast-root] [data-toast-slot="detail"]:lang(zh-Hant) {
+  font-family: "Noto Sans TC Variable", "Microsoft JhengHei", "PingFang TC", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: .04em;
+}

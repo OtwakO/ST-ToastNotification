@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "defaultThemeId": "whisper",
+  "themes": {
+    "whisper": {
+      "schemaVersion": 1,
+      "id": "whisper",
+      "name": "Whisper",
+      "description": "A quiet typographic memory cue.",
+      "tokens": {
+        "primary": {
+          "type": "color",
+          "label": "Primary",
+          "default": "#141214",
+          "legacyKeys": [
+            "primary"
+          ]
+        },
+        "accent1": {
+          "type": "color",
+          "label": "Accent 1",
+          "default": "#e0ccaa",
+          "legacyKeys": [
+            "accent1"
+          ]
+        },
+        "accent2": {
+          "type": "color",
+          "label": "Accent 2",
+          "default": "#f3e6cf",
+          "legacyKeys": [
+            "accent2"
+          ]
+        },
+        "accent3": {
+          "type": "color",
+          "label": "Accent 3",
+          "default": "#eedcbe",
+          "legacyKeys": [
+            "accent3"
+          ]
+        },
+        "foreground": {
+          "type": "color",
+          "label": "Text",
+          "default": "#f5f0e8",
+          "legacyKeys": [
+            "foreground"
+          ]
+        },
+        "mutedForeground": {
+          "type": "color",
+          "label": "Muted text",
+          "default": "#d8cec0",
+          "legacyKeys": [
+            "mutedForeground"
+          ]
+        },
+        "titleFontSizePx": {
+          "type": "range",
+          "label": "Title size",
+          "default": 14,
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "legacyKeys": [
+            "titleFontSizePx"
+          ]
+        },
+        "detailFontSizePx": {
+          "type": "range",
+          "label": "Detail size",
+          "default": 10,
+          "min": 8,
+          "max": 18,
+          "step": 1,
+          "unit": "px",
+          "legacyKeys": [
+            "detailFontSizePx"
+          ]
+        }
+      },
+      "template": "<div data-toast-root>\n  <div class=\"toast-inner\">\n    <div class=\"copy\">\n      <div data-toast-slot=\"message\"></div>\n      <div data-toast-slot=\"detail\"></div>\n    </div>\n  </div>\n</div>\n",
+      "css": "[data-toast-root] {\n  position: relative;\n  display: grid;\n  place-items: center;\n  min-width: min(380px, calc(100vw - 20px));\n  min-height: 48px;\n  padding: 11px 76px;\n  box-sizing: border-box;\n  color: var(--st-token-foreground);\n}\n\n[data-toast-root]::before {\n  content: \"\";\n  position: absolute;\n  z-index: -1;\n  inset: -6px -12px;\n  border-radius: 13px 13px 18px 18px;\n  background:\n    radial-gradient(ellipse at 50% 130%, color-mix(in srgb, var(--st-token-accent1) 20%, transparent), transparent 64%),\n    radial-gradient(ellipse at 50% -45%, color-mix(in srgb, var(--st-token-accent2) 9%, transparent), transparent 58%),\n    linear-gradient(110deg, color-mix(in srgb, var(--st-token-accent3) 4%, transparent), transparent 34%, transparent 66%, color-mix(in srgb, var(--st-token-accent3) 3%, transparent)),\n    color-mix(in srgb, var(--st-token-primary) 96%, transparent);\n  box-shadow: 0 10px 26px #0006, 0 2px 7px #0004,\n    inset 0 1px color-mix(in srgb, var(--st-token-accent2) 4%, transparent);\n  mask-image: linear-gradient(90deg, transparent, #000 28%, #000 72%, transparent);\n}\n\n[data-toast-root] .copy {\n  position: relative;\n  width: 100%;\n  text-align: center;\n}\n\n[data-toast-root] .copy::before,\n[data-toast-root] .copy::after {\n  content: \"\";\n  position: absolute;\n  top: 50%;\n  width: 48px;\n  height: 1px;\n}\n\n[data-toast-root] .copy::before {\n  right: calc(100% + 12px);\n  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--st-token-accent1) 62%, transparent));\n}\n\n[data-toast-root] .copy::after {\n  left: calc(100% + 12px);\n  background: linear-gradient(90deg, color-mix(in srgb, var(--st-token-accent1) 62%, transparent), transparent);\n}\n\n[data-toast-root] [data-toast-slot=\"message\"] {\n  font-family: Georgia, serif;\n  font-size: var(--st-token-title-font-size-px);\n  font-style: italic;\n  letter-spacing: .025em;\n}\n\n[data-toast-root] [data-toast-slot=\"detail\"] {\n  margin-top: 3px;\n  color: var(--st-token-muted-foreground);\n  font-family: Georgia, serif;\n  font-size: var(--st-token-detail-font-size-px);\n  letter-spacing: .06em;\n}\n\n[data-toast-root] [data-toast-slot=\"message\"]:lang(zh-CN),\n[data-toast-root] [data-toast-slot=\"detail\"]:lang(zh-CN) {\n  font-family: \"Noto Sans SC Variable\", \"Microsoft YaHei\", \"PingFang SC\", sans-serif;\n  font-style: normal;\n  font-weight: 600;\n  letter-spacing: .04em;\n}\n\n[data-toast-root] [data-toast-slot=\"message\"]:lang(zh-TW),\n[data-toast-root] [data-toast-slot=\"message\"]:lang(zh-HK),\n[data-toast-root] [data-toast-slot=\"message\"]:lang(zh-Hant),\n[data-toast-root] [data-toast-slot=\"detail\"]:lang(zh-TW),\n[data-toast-root] [data-toast-slot=\"detail\"]:lang(zh-HK),\n[data-toast-root] [data-toast-slot=\"detail\"]:lang(zh-Hant) {\n  font-family: \"Noto Sans TC Variable\", \"Microsoft JhengHei\", \"PingFang TC\", sans-serif;\n  font-style: normal;\n  font-weight: 600;\n  letter-spacing: .04em;\n}\n"
+    }
+  }
+}

@@ -14,5 +14,8 @@ describe('public entry point', () => {
     const handle = library.toast.show({ message: 'Ready' });
     expect(handle.id).toBe('st-toast-1');
     expect(document.querySelectorAll('[data-st-toast-host]')).toHaveLength(1);
+    expect(library.getTheme(library.themeCatalog.defaultThemeId)?.id).toBe(
+      library.themeCatalog.defaultThemeId,
+    );
   });
 });

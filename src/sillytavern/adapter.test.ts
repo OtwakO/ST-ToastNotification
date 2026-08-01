@@ -47,7 +47,11 @@ describe('startSillyTavernAdapter', () => {
     color.dispatchEvent(new Event('input', { bubbles: true }));
 
     expect(
-      (extensionSettings[SETTINGS_KEY] as Record<string, unknown>).accent1,
+      (
+        extensionSettings[SETTINGS_KEY] as {
+          themeOverrides: Record<string, Record<string, unknown>>;
+        }
+      ).themeOverrides.whisper.accent1,
     ).toBe('#abcdef');
     expect(saveSettingsDebounced).toHaveBeenCalledTimes(2);
 

@@ -26,19 +26,19 @@ Notifications appear over SillyTavern's chat interface while users read or gener
 
 - TypeScript source with built JavaScript artifacts for browser consumption.
 - Framework-free and runtime-dependency-free portable renderer.
-- Shadow DOM style isolation with documented preset tokens and notifier-level configuration.
+- Shadow DOM style isolation with a generated catalog of declarative theme packs and notifier-level token configuration.
 - Preferred CDN consumption uses version-pinned ESM artifacts; the installed extension uses a local bundled artifact and does not require network access.
 - Initial project scope includes the reusable library, a thin SillyTavern adapter with settings and previews, and a standalone visual demo.
 - Default notification position is top-center.
 - The renderer accepts arbitrary caller-provided text and does not infer memory events.
 - The first release exposes ESM, namespaced global, and custom-event invocation when these remain simple adapters over one interface.
-- Notifications must minimize layout work; Whisper uses opacity-only animation to preserve text clarity.
-- V1 persists only selected preset, six color values, title/detail font sizes, duration, position, and maximum visible count.
-- V1 uses native browser settings controls and excludes user-created presets, preset import/export, and per-notification visual overrides.
+- Notifications must minimize layout work; each theme declares its own constrained motion, and the selected first pack uses opacity-only animation to preserve text clarity.
+- V1 persists only selected theme, behavior values, and per-theme token overrides.
+- V1 uses native browser settings controls generated from theme manifests and excludes user-created themes, remote packs, and per-notification visual overrides.
 
 ## Brand Commitments
 
-The product name is ST-ToastNotification. Notifications should feel non-obtrusive, polished, compact, and suitable for visual-novel-like feedback such as “Memory recalled” or “This moment will be remembered.” Whisper is the first and default visual preset.
+The product name is ST-ToastNotification. Notifications should feel non-obtrusive, polished, compact, and suitable for visual-novel-like feedback such as “Memory recalled” or “This moment will be remembered.” Whisper is the first bundled pack and default catalog selection; it is not a privileged runtime theme.
 
 ## Evidence on Hand
 

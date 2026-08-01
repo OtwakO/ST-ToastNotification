@@ -4,7 +4,7 @@ A lightweight, configurable toast module and SillyTavern extension.
 
 ## Status
 
-The portable TypeScript core, **Whisper** preset, invocation bridges, and installable SillyTavern adapter are implemented. Real-client compatibility verification remains before the first release.
+The portable TypeScript core, generated bundled theme catalog, invocation bridges, and installable SillyTavern adapter are implemented. Whisper is the default file-based theme pack; real-client compatibility verification remains before the first release.
 
 ## Local setup
 
@@ -36,10 +36,13 @@ Create an isolated notifier when an extension needs its own persistent settings:
 import { createNotifier } from 'st-toast-notification';
 
 const notifier = createNotifier({
-  accent1: '#e0ccaa',
-  foreground: '#f5f0e8',
-  titleFontSizePx: 14,
-  detailFontSizePx: 10,
+  themeId: 'whisper',
+  themeOverrides: {
+    accent1: '#e0ccaa',
+    foreground: '#f5f0e8',
+    titleFontSizePx: 14,
+    detailFontSizePx: 10,
+  },
   durationMs: 3600,
   position: 'top-center',
   maxVisible: 3,
@@ -48,7 +51,7 @@ const notifier = createNotifier({
 notifier.show({ message: '4 memories retained', lang: 'en' });
 ```
 
-Appearance is configured per notifier. V1 deliberately does not support per-toast styling or user-created presets.
+Appearance is configured per notifier through the selected theme's declared tokens. Add a bundled theme by dropping a valid folder under `themes/` and running the build; no notifier or settings TypeScript changes are required. V1 deliberately does not support remote packs, theme JavaScript, or user-created themes through settings.
 
 Browser extensions that cannot import the module directly can install the optional bridges:
 
@@ -68,6 +71,29 @@ document.dispatchEvent(new CustomEvent('st-toast:show', {
 
 Call `cleanup()` when the consuming extension unloads.
 
+## Adding a bundled theme
+
+Create a folder with the required pack files:
+
+```text
+themes/my-theme/
+├── theme.json
+├── template.html
+└── theme.css
+```
+
+`theme.json` declares the theme ID, display name, and editable tokens. `template.html` must contain exactly one `data-toast-root` and one `data-toast-slot="message"`; optional `detail` and `tone-label` slots are supported. `theme.css` must use scoped selectors and declared `--st-token-*` variables. Scripts, inline handlers, remote URLs, and executable markup are rejected during generation.
+
+Run:
+
+```bash
+npm run themes:generate
+npm test
+npm run build
+```
+
+The generated catalog is embedded in both library and extension builds. `themes/catalog.json` selects the default and can provide full validated entry overrides. Whisper is not special: it is simply the initial `defaultThemeId`.
+
 ## SillyTavern installation
 
 Install the repository URL through SillyTavern's extension manager:
@@ -76,7 +102,7 @@ Install the repository URL through SillyTavern's extension manager:
 https://github.com/OtwakO/ST-ToastNotification
 ```
 
-The extension adds a **Toast Notifications** drawer to extension settings. It persists only the selected built-in preset, six colors, title/detail sizes, duration, position, and maximum visible count. Controls use native color pickers, ranges, and selects, with Preview and Reset actions.
+The extension adds a **Toast Notifications** drawer to extension settings. It persists the selected theme, behavior values, and per-theme token overrides. Controls are generated from each theme manifest using native color pickers, ranges, numbers, selects, and checkboxes, with Preview and Reset actions. Whisper is only the initial default selection.
 
 Other SillyTavern extensions can invoke it without importing internal files:
 

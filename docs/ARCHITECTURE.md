@@ -33,7 +33,7 @@ const notifier = createNotifier(options);
 const handle = notifier.show(notification);
 ```
 
-The notifier owns DOM creation, queueing, timing, accessibility announcements, preset resolution, and cleanup. Callers provide content and intent, not DOM markup, animation steps, or per-notification visual overrides. The returned handle supports dismissal without exposing renderer internals.
+The notifier owns DOM creation, queueing, timing, accessibility announcements, generic theme-pack resolution, and cleanup. Callers provide content and intent, not DOM markup, animation steps, or per-notification visual overrides. The returned handle supports dismissal without exposing renderer internals.
 
 ## Adapters
 
@@ -58,7 +58,7 @@ The ordinary-theme invariant is: deleting `themes/whisper/` and changing only th
 
 - Create one fixed host and Shadow DOM root lazily.
 - Keep the host outside SillyTavern layout flow.
-- Presets define constrained motion. Whisper animates opacity only and never transforms its glyph-bearing subtree; avoid animation-time layout measurements.
+- Theme packs define constrained motion. The selected first pack uses opacity-only animation and never transforms its glyph-bearing subtree; avoid animation-time layout measurements.
 - Cap simultaneously visible notifications and queue or coalesce overflow.
 - Remove completed nodes and listeners.
 - Use pointer pass-through unless an explicit interactive notification is introduced later.
