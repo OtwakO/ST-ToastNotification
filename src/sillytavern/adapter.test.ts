@@ -21,8 +21,14 @@ describe('startSillyTavernAdapter', () => {
     const cleanup = startSillyTavernAdapter(context);
     const panel = document.querySelector('[data-st-toast-settings]');
     expect(panel).not.toBeNull();
+    const hostStyle = document.createElement('style');
+    hostStyle.textContent = '.inline-drawer-content { display: none; }';
+    document.head.append(hostStyle);
     const drawerContent = panel?.querySelector<HTMLElement>('.inline-drawer-content');
-    expect(drawerContent?.style.display).toBe('none');
+    const settingsContent = panel?.querySelector<HTMLElement>('[data-settings-content]');
+    expect(settingsContent?.parentElement).toBe(drawerContent);
+    expect(getComputedStyle(drawerContent!).display).toBe('none');
+    expect(settingsContent).not.toBe(drawerContent);
     expect(
       panel?.querySelector<HTMLInputElement>('input[name="accent1"]')?.type,
     ).toBe('color');
@@ -72,6 +78,7 @@ describe('startSillyTavernAdapter', () => {
     expect(document.querySelector('[data-st-toast-host]')?.shadowRoot).not.toBeNull();
 
     cleanup();
+    hostStyle.remove();
     expect(document.querySelector('[data-st-toast-settings]')).toBeNull();
     expect(document.querySelector('[data-st-toast-host]')).toBeNull();
   });

@@ -410,7 +410,7 @@ function re(e, t = document.querySelector("#extensions_settings2")) {
 }
 function le(e) {
   const t = document.createElement("section");
-  return t.dataset.stToastSettings = "", t.className = "st-toast-settings", t.innerHTML = '<div class="inline-drawer"><div class="inline-drawer-toggle inline-drawer-header"><b>Toast Notifications</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content" data-settings-content style="display: none"></div></div>', z(t, e), t;
+  return t.dataset.stToastSettings = "", t.className = "st-toast-settings", t.innerHTML = '<div class="inline-drawer"><div class="inline-drawer-toggle inline-drawer-header"><b>Toast Notifications</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content"><div class="st-toast-settings-content" data-settings-content></div></div></div>', z(t, e), t;
 }
 function z(e, t) {
   const n = e.querySelector("[data-settings-content]");

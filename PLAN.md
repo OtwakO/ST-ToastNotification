@@ -100,3 +100,9 @@ The project is library-first: a framework-free portable notification module owns
 - **Fix**: Added ten catalog-level color slots merged into every pack, generated stylesheet-usage metadata, disabled and labeled unused color controls, and initialized the settings drawer collapsed.
 - **Affected**: `themes/catalog.json`, `scripts/themes/generate-catalog.mjs`, `src/themes/types.ts`, `src/sillytavern/adapter.ts`, `style.css`, documentation and tests
 - **Watch out**: A shared color is considered used only when its exact generated CSS variable is referenced in the pack stylesheet.
+
+### [2026-08-01] Settings drawer appeared expanded despite collapsed markup
+- **Problem**: Extension CSS set `.st-toast-settings .inline-drawer-content` to `display: grid`, overriding SillyTavern's native `.inline-drawer-content { display: none; }` collapsed state through higher selector specificity.
+- **Fix**: Left the native drawer content element entirely under SillyTavern's display control and moved the extension's grid layout to a nested `.st-toast-settings-content` element; replaced the inline-style assertion with an effective-style regression test.
+- **Affected**: `src/sillytavern/adapter.ts`, `src/sillytavern/adapter.test.ts`, `style.css`
+- **Watch out**: Do not assign layout display values directly to SillyTavern-owned collapsible elements.
