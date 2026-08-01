@@ -21,9 +21,20 @@ describe('startSillyTavernAdapter', () => {
     const cleanup = startSillyTavernAdapter(context);
     const panel = document.querySelector('[data-st-toast-settings]');
     expect(panel).not.toBeNull();
+    const drawerContent = panel?.querySelector<HTMLElement>('.inline-drawer-content');
+    expect(drawerContent?.style.display).toBe('none');
     expect(
       panel?.querySelector<HTMLInputElement>('input[name="accent1"]')?.type,
     ).toBe('color');
+    const unusedSecondary = panel?.querySelector<HTMLInputElement>(
+      'input[name="secondary"]',
+    );
+    expect(unusedSecondary?.disabled).toBe(true);
+    expect(unusedSecondary?.closest('label')?.textContent).toContain(
+      'Unused by this theme',
+    );
+    expect(panel?.querySelector<HTMLInputElement>('input[name="accent4"]')?.disabled).toBe(true);
+    expect(panel?.querySelectorAll('input[type="color"]')).toHaveLength(10);
     expect(
       panel?.querySelector<HTMLInputElement>('input[name="titleFontSizePx"]')
         ?.type,

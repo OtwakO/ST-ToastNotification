@@ -1,17 +1,17 @@
 const L = "st-toast:show";
 function _(e, t = {}) {
-  const n = t.globalTarget ?? globalThis, o = t.eventTarget ?? document, s = n.STToastNotification;
+  const n = t.globalTarget ?? globalThis, o = t.eventTarget ?? document, i = n.STToastNotification;
   n.STToastNotification = {
-    show: (i) => e.show(i)
+    show: (s) => e.show(s)
   };
-  const r = (i) => {
-    e.show(i.detail);
+  const r = (s) => {
+    e.show(s.detail);
   };
   return o.addEventListener(L, r), () => {
-    o.removeEventListener(L, r), s ? n.STToastNotification = s : delete n.STToastNotification;
+    o.removeEventListener(L, r), i ? n.STToastNotification = i : delete n.STToastNotification;
   };
 }
-const D = "whisper", G = { whisper: { schemaVersion: 1, id: "whisper", name: "Whisper", description: "A quiet typographic memory cue.", tokens: { primary: { type: "color", label: "Primary", default: "#141214", legacyKeys: ["primary"] }, accent1: { type: "color", label: "Accent 1", default: "#e0ccaa", legacyKeys: ["accent1"] }, accent2: { type: "color", label: "Accent 2", default: "#f3e6cf", legacyKeys: ["accent2"] }, accent3: { type: "color", label: "Accent 3", default: "#eedcbe", legacyKeys: ["accent3"] }, foreground: { type: "color", label: "Text", default: "#f5f0e8", legacyKeys: ["foreground"] }, mutedForeground: { type: "color", label: "Muted text", default: "#d8cec0", legacyKeys: ["mutedForeground"] }, titleFontSizePx: { type: "range", label: "Title size", default: 14, min: 10, max: 24, step: 1, unit: "px", legacyKeys: ["titleFontSizePx"] }, detailFontSizePx: { type: "range", label: "Detail size", default: 10, min: 8, max: 18, step: 1, unit: "px", legacyKeys: ["detailFontSizePx"] } }, template: `<div data-toast-root>
+const D = "whisper", G = { whisper: { schemaVersion: 1, id: "whisper", name: "Whisper", description: "A quiet typographic memory cue.", tokens: { primary: { type: "color", label: "Primary", default: "#141214", legacyKeys: ["primary"], used: !0 }, secondary: { type: "color", label: "Secondary", default: "#242124", used: !1 }, accent1: { type: "color", label: "Accent 1", default: "#e0ccaa", legacyKeys: ["accent1"], used: !0 }, accent2: { type: "color", label: "Accent 2", default: "#f3e6cf", legacyKeys: ["accent2"], used: !0 }, accent3: { type: "color", label: "Accent 3", default: "#eedcbe", legacyKeys: ["accent3"], used: !0 }, accent4: { type: "color", label: "Accent 4", default: "#c9b99f", used: !1 }, accent5: { type: "color", label: "Accent 5", default: "#a9987d", used: !1 }, accent6: { type: "color", label: "Accent 6", default: "#877861", used: !1 }, foreground: { type: "color", label: "Text", default: "#f5f0e8", legacyKeys: ["foreground"], used: !0 }, mutedForeground: { type: "color", label: "Muted text", default: "#d8cec0", legacyKeys: ["mutedForeground"], used: !0 }, titleFontSizePx: { type: "range", label: "Title size", default: 14, min: 10, max: 24, step: 1, unit: "px", legacyKeys: ["titleFontSizePx"] }, detailFontSizePx: { type: "range", label: "Detail size", default: 10, min: 8, max: 18, step: 1, unit: "px", legacyKeys: ["detailFontSizePx"] } }, template: `<div data-toast-root>
   <div class="toast-inner">
     <div class="copy">
       <div data-toast-slot="message"></div>
@@ -105,15 +105,15 @@ const D = "whisper", G = { whisper: { schemaVersion: 1, id: "whisper", name: "Wh
   font-weight: 600;
   letter-spacing: .04em;
 }
-` } }, W = {
+` } }, U = {
   defaultThemeId: D,
   themes: G
-}, E = W;
+}, E = U;
 function v(e) {
   const t = e ?? E.defaultThemeId;
   return E.themes[t];
 }
-function U() {
+function W() {
   return Object.values(E.themes).map(({ id: e, name: t, description: n }) => ({
     id: e,
     name: t,
@@ -166,37 +166,37 @@ const K = {
 function Q(e = {}) {
   const t = X(e), n = v(t.themeId);
   if (!n) throw new TypeError(`Unknown theme: ${t.themeId}`);
-  const o = n, s = q(o, t.themeOverrides);
-  let r = 0, i, u, m, c;
-  const h = [], b = [];
-  function d() {
-    if (i) return;
-    i = document.createElement("div"), i.dataset.stToastHost = "", i.style.position = "fixed", i.style.inset = "0 auto auto 0", i.style.width = "100vw", i.style.height = "100dvh", i.style.maxWidth = "100%", i.style.zIndex = String(t.zIndex), i.style.pointerEvents = "none";
-    const a = i.attachShadow({ mode: "open" }), g = document.createElement("style");
-    g.textContent = te(o.css);
+  const o = n, i = q(o, t.themeOverrides);
+  let r = 0, s, m, c, d;
+  const h = [], g = [];
+  function u() {
+    if (s) return;
+    s = document.createElement("div"), s.dataset.stToastHost = "", s.style.position = "fixed", s.style.inset = "0 auto auto 0", s.style.width = "100vw", s.style.height = "100dvh", s.style.maxWidth = "100%", s.style.zIndex = String(t.zIndex), s.style.pointerEvents = "none";
+    const a = s.attachShadow({ mode: "open" }), b = document.createElement("style");
+    b.textContent = te(o.css);
     const l = document.createElement("div");
     l.className = "stack", l.dataset.position = t.position;
     const p = document.createElement("div");
     p.className = "live polite", p.setAttribute("aria-live", "polite"), p.setAttribute("aria-atomic", "true");
     const f = document.createElement("div");
-    f.className = "live assertive", f.setAttribute("aria-live", "assertive"), f.setAttribute("aria-atomic", "true"), a.append(g, l, p, f);
-    for (const [T, x] of Object.entries(s))
+    f.className = "live assertive", f.setAttribute("aria-live", "assertive"), f.setAttribute("aria-atomic", "true"), a.append(b, l, p, f);
+    for (const [T, x] of Object.entries(i))
       a.host.style.setProperty(
         J(T),
         Z(o, T, x)
       );
-    u = l, m = p, c = f, document.documentElement.append(i);
+    m = l, c = p, d = f, document.documentElement.append(s);
   }
   function y(a) {
     if (a.input.announcement === "off") return;
-    const g = a.input.announcement === "assertive" ? c : m;
-    g && (g.textContent = N(a.input));
+    const b = a.input.announcement === "assertive" ? d : c;
+    b && (b.textContent = N(a.input));
   }
   function k(a) {
-    d();
-    const g = document.createElement("template");
-    g.innerHTML = o.template.trim();
-    const l = g.content.firstElementChild;
+    u();
+    const b = document.createElement("template");
+    b.innerHTML = o.template.trim();
+    const l = b.content.firstElementChild;
     if (!(l instanceof HTMLElement)) throw new Error(`Theme ${o.id} has no renderable root`);
     const p = l.querySelector('[data-toast-slot="message"]'), f = l.querySelector('[data-toast-slot="detail"]');
     if (!p) throw new Error(`Theme ${o.id} has no message slot`);
@@ -204,28 +204,28 @@ function Q(e = {}) {
     const T = l.querySelector('[data-toast-slot="tone-label"]');
     T && (T.textContent = K[a.input.tone]);
     const x = document.createElement("div");
-    x.className = "toast", x.style.setProperty("--toast-duration", `${a.durationMs}ms`), x.append(l), x.setAttribute("aria-label", N(a.input)), u?.append(x), a.element = x, h.push(a), y(a), a.timer = setTimeout(() => O(a), a.durationMs);
+    x.className = "toast", x.style.setProperty("--toast-duration", `${a.durationMs}ms`), x.append(l), x.setAttribute("aria-label", N(a.input)), m?.append(x), a.element = x, h.push(a), y(a), a.timer = setTimeout(() => O(a), a.durationMs);
   }
   function O(a) {
     if (a.settled) return;
     a.settled = !0, a.timer && clearTimeout(a.timer), a.element?.remove();
-    const g = h.indexOf(a);
-    g >= 0 && h.splice(g, 1);
-    const l = b.indexOf(a);
-    if (l >= 0 && b.splice(l, 1), a.resolveClosed(), h.length < t.maxVisible) {
-      const p = b.shift();
+    const b = h.indexOf(a);
+    b >= 0 && h.splice(b, 1);
+    const l = g.indexOf(a);
+    if (l >= 0 && g.splice(l, 1), a.resolveClosed(), h.length < t.maxVisible) {
+      const p = g.shift();
       p && k(p);
     }
   }
-  function A() {
-    for (const a of [...h, ...b]) O(a);
+  function C() {
+    for (const a of [...h, ...g]) O(a);
   }
   function B() {
-    A(), i?.remove(), i = void 0, u = void 0, m = void 0, c = void 0;
+    C(), s?.remove(), s = void 0, m = void 0, c = void 0, d = void 0;
   }
   return {
     show(a) {
-      const g = ee(a, t);
+      const b = ee(a, t);
       let l = () => {
       };
       const p = new Promise((T) => {
@@ -234,7 +234,7 @@ function Q(e = {}) {
         id: `st-toast-${++r}`,
         input: {
           ...a,
-          message: g,
+          message: b,
           tone: a.tone ?? "info",
           announcement: a.announcement ?? "polite"
         },
@@ -243,9 +243,9 @@ function Q(e = {}) {
         closed: p,
         settled: !1
       };
-      return h.length < t.maxVisible ? k(f) : b.push(f), { id: f.id, closed: p, dismiss: () => O(f) };
+      return h.length < t.maxVisible ? k(f) : g.push(f), { id: f.id, closed: p, dismiss: () => O(f) };
     },
-    dismissAll: A,
+    dismissAll: C,
     destroy: B
   };
 }
@@ -296,27 +296,27 @@ const j = "st_toast_notification", V = 2, ne = [
   }
 };
 function oe(e) {
-  const t = S(e[j]), n = t?.version === V ? ae(t) : ie(t);
+  const t = S(e[j]), n = t?.version === V ? ae(t) : se(t);
   return e[j] = n, n;
 }
 function ae(e) {
-  const t = C(e.themeId) ?? w.themeId, n = R(S(e.behavior));
+  const t = A(e.themeId) ?? w.themeId, n = R(S(e.behavior));
   return {
     version: V,
     themeId: t,
     behavior: n,
-    themeOverrides: se(e.themeOverrides)
+    themeOverrides: ie(e.themeOverrides)
   };
 }
-function ie(e) {
-  const t = C(e?.themeId ?? e?.preset) ?? w.themeId, n = v(t) ?? v(), o = {};
+function se(e) {
+  const t = A(e?.themeId ?? e?.preset) ?? w.themeId, n = v(t) ?? v(), o = {};
   if (n) {
-    const s = {};
-    for (const [i, u] of Object.entries(n.tokens)) {
-      const c = [i, ...u.legacyKeys ?? []].find((h) => Object.hasOwn(e ?? {}, h));
-      c && e && (s[i] = e[c]);
+    const i = {};
+    for (const [s, m] of Object.entries(n.tokens)) {
+      const d = [s, ...m.legacyKeys ?? []].find((h) => Object.hasOwn(e ?? {}, h));
+      d && e && (i[s] = e[d]);
     }
-    const r = F(n.id, s);
+    const r = F(n.id, i);
     Object.keys(r).length > 0 && (o[n.id] = r);
   }
   return {
@@ -334,12 +334,12 @@ function R(e) {
     maxVisible: Number.isInteger(n) && n > 0 ? n : w.behavior.maxVisible
   };
 }
-function se(e) {
+function ie(e) {
   const t = {}, n = S(e);
   if (!n) return t;
-  for (const [o, s] of Object.entries(n)) {
-    const r = S(s);
-    C(o) && r && (t[o] = F(o, r));
+  for (const [o, i] of Object.entries(n)) {
+    const r = S(i);
+    A(o) && r && (t[o] = F(o, r));
   }
   return t;
 }
@@ -347,15 +347,15 @@ function F(e, t) {
   const n = v(e);
   if (!n) return {};
   const o = {};
-  for (const [s, r] of Object.entries(t))
-    if (n.tokens[s])
+  for (const [i, r] of Object.entries(t))
+    if (n.tokens[i])
       try {
-        q(n, { [s]: r }), o[s] = r;
+        q(n, { [i]: r }), o[i] = r;
       } catch {
       }
   return o;
 }
-function C(e) {
+function A(e) {
   return typeof e == "string" && v(e) ? v(e)?.id : void 0;
 }
 function P(e, t) {
@@ -368,77 +368,79 @@ function re(e, t = document.querySelector("#extensions_settings2")) {
   if (!t) throw new Error("SillyTavern extension settings panel was not found");
   const n = oe(e.extensionSettings), o = le(n);
   t.append(o);
-  let s, r;
-  const i = () => {
-    s?.destroy(), r?.(), s = Q({
+  let i, r;
+  const s = () => {
+    i?.destroy(), r?.(), i = Q({
       themeId: n.themeId,
       themeOverrides: n.themeOverrides[n.themeId] ?? {},
       ...n.behavior
-    }), r = _(s);
+    }), r = _(i);
   };
-  i();
-  const u = (b) => {
-    const d = b.target;
-    if (!(d instanceof HTMLInputElement || d instanceof HTMLSelectElement)) return;
-    const y = d.name;
+  s();
+  const m = (g) => {
+    const u = g.target;
+    if (!(u instanceof HTMLInputElement || u instanceof HTMLSelectElement)) return;
+    const y = u.name;
     if (y === "themeId")
-      n.themeId = d.value, z(o, n);
+      n.themeId = u.value, z(o, n);
     else if (ue(n.themeId, y)) {
-      const k = me(d);
-      n.themeOverrides[n.themeId] ??= {}, n.themeOverrides[n.themeId][y] = k, H(o, y, d.value);
+      const k = me(u);
+      n.themeOverrides[n.themeId] ??= {}, n.themeOverrides[n.themeId][y] = k, H(o, y, u.value);
     } else if (y in n.behavior) {
-      const k = d.type === "range" || d.type === "number" ? Number(d.value) : d.value;
-      Object.assign(n.behavior, { [y]: k }), H(o, y, d.value);
+      const k = u.type === "range" || u.type === "number" ? Number(u.value) : u.value;
+      Object.assign(n.behavior, { [y]: k }), H(o, y, u.value);
     } else
       return;
-    e.saveSettingsDebounced(), i();
-  }, m = () => {
-    s?.show({
+    e.saveSettingsDebounced(), s();
+  }, c = () => {
+    i?.show({
       message: "Memory recalled",
       detail: "This moment will be remembered.",
       tone: "info"
     });
-  }, c = () => {
-    delete n.themeOverrides[n.themeId], z(o, n), e.saveSettingsDebounced(), i();
-  }, h = (b) => {
-    const d = b.target;
-    d instanceof HTMLButtonElement && (d.matches('[data-action="preview"]') && m(), d.matches('[data-action="reset"]') && c());
+  }, d = () => {
+    delete n.themeOverrides[n.themeId], z(o, n), e.saveSettingsDebounced(), s();
+  }, h = (g) => {
+    const u = g.target;
+    u instanceof HTMLButtonElement && (u.matches('[data-action="preview"]') && c(), u.matches('[data-action="reset"]') && d());
   };
-  return o.addEventListener("input", u), o.addEventListener("change", u), o.addEventListener("click", h), () => {
-    o.removeEventListener("input", u), o.removeEventListener("change", u), o.removeEventListener("click", h), r?.(), s?.destroy(), o.remove();
+  return o.addEventListener("input", m), o.addEventListener("change", m), o.addEventListener("click", h), () => {
+    o.removeEventListener("input", m), o.removeEventListener("change", m), o.removeEventListener("click", h), r?.(), i?.destroy(), o.remove();
   };
 }
 function le(e) {
   const t = document.createElement("section");
-  return t.dataset.stToastSettings = "", t.className = "st-toast-settings", t.innerHTML = '<div class="inline-drawer"><div class="inline-drawer-toggle inline-drawer-header"><b>Toast Notifications</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content" data-settings-content></div></div>', z(t, e), t;
+  return t.dataset.stToastSettings = "", t.className = "st-toast-settings", t.innerHTML = '<div class="inline-drawer"><div class="inline-drawer-toggle inline-drawer-header"><b>Toast Notifications</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content" data-settings-content style="display: none"></div></div>', z(t, e), t;
 }
 function z(e, t) {
   const n = e.querySelector("[data-settings-content]");
   if (!n) return;
-  const o = v(t.themeId) ?? v(), s = U().map(({ id: m, name: c }) => `<option value="${$(m)}">${I(c)}</option>`).join(""), r = o ? Object.entries(o.tokens).map(([m, c]) => ce(m, c, t)).join("") : "";
-  n.innerHTML = `<label>Theme<select name="themeId">${s}</select></label><div class="st-toast-color-grid">${r}</div>${de(t)}<div class="st-toast-actions"><button type="button" class="menu_button" data-action="preview">Preview</button><button type="button" class="menu_button" data-action="reset">Reset theme</button></div>`;
-  const i = n.querySelector('[name="themeId"]');
-  i && (i.value = t.themeId);
-  const u = n.querySelector('[name="position"]');
-  if (u && (u.value = t.behavior.position), o)
-    for (const [m, c] of Object.entries(o.tokens)) {
-      if (c.type !== "select") continue;
-      const h = n.querySelector(`[name="${m}"]`), b = t.themeOverrides[t.themeId]?.[m] ?? c.default;
-      h && (h.value = String(b));
+  const o = v(t.themeId) ?? v(), i = W().map(({ id: c, name: d }) => `<option value="${I(c)}">${$(d)}</option>`).join(""), r = o ? Object.entries(o.tokens).map(([c, d]) => ce(c, d, t)).join("") : "";
+  n.innerHTML = `<label>Theme<select name="themeId">${i}</select></label><div class="st-toast-color-grid">${r}</div>${de(t)}<div class="st-toast-actions"><button type="button" class="menu_button" data-action="preview">Preview</button><button type="button" class="menu_button" data-action="reset">Reset theme</button></div>`;
+  const s = n.querySelector('[name="themeId"]');
+  s && (s.value = t.themeId);
+  const m = n.querySelector('[name="position"]');
+  if (m && (m.value = t.behavior.position), o)
+    for (const [c, d] of Object.entries(o.tokens)) {
+      if (d.type !== "select") continue;
+      const h = n.querySelector(`[name="${c}"]`), g = t.themeOverrides[t.themeId]?.[c] ?? d.default;
+      h && (h.value = String(g));
     }
 }
 function ce(e, t, n) {
-  const o = n.themeOverrides[n.themeId]?.[e] ?? t.default, s = $(e), r = I(t.label);
-  if (t.type === "color")
-    return `<label>${r}<input type="color" name="${s}" value="${$(String(o))}"></label>`;
-  if (t.type === "boolean")
-    return `<label>${r}<input type="checkbox" name="${s}" ${o ? "checked" : ""}></label>`;
-  if (t.type === "select") {
-    const m = t.options.map((c) => `<option value="${$(c.value)}">${I(c.label)}</option>`).join("");
-    return `<label>${r}<select name="${s}">${m}</select></label>`;
+  const o = n.themeOverrides[n.themeId]?.[e] ?? t.default, i = I(e), r = $(t.label);
+  if (t.type === "color") {
+    const c = t.used === !1;
+    return `<label class="${c ? "st-toast-token-unused" : ""}"><span>${r}${c ? '<small class="st-toast-token-status">Unused by this theme</small>' : ""}</span><input type="color" name="${i}" value="${I(String(o))}" ${c ? 'disabled aria-disabled="true"' : ""}></label>`;
   }
-  const i = t.type === "range" ? "range" : "number", u = t.unit ? ` (${I(t.unit)})` : "";
-  return `<label>${r}${u}<input type="${i}" name="${s}" min="${t.min}" max="${t.max}" step="${t.step}" value="${o}"><output data-output="${s}">${o}</output></label>`;
+  if (t.type === "boolean")
+    return `<label>${r}<input type="checkbox" name="${i}" ${o ? "checked" : ""}></label>`;
+  if (t.type === "select") {
+    const c = t.options.map((d) => `<option value="${I(d.value)}">${$(d.label)}</option>`).join("");
+    return `<label>${r}<select name="${i}">${c}</select></label>`;
+  }
+  const s = t.type === "range" ? "range" : "number", m = t.unit ? ` (${$(t.unit)})` : "";
+  return `<label>${r}${m}<input type="${s}" name="${i}" min="${t.min}" max="${t.max}" step="${t.step}" value="${o}"><output data-output="${i}">${o}</output></label>`;
 }
 function de(e) {
   const { durationMs: t, maxVisible: n, position: o } = e.behavior;
@@ -454,11 +456,11 @@ function H(e, t, n) {
   const o = e.querySelector(`[data-output="${t}"]`);
   o && (o.value = n);
 }
-function I(e) {
+function $(e) {
   return e.replace(/[&<>'"]/g, (t) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[t] ?? t);
 }
-function $(e) {
-  return I(e);
+function I(e) {
+  return $(e);
 }
 let M;
 function pe() {

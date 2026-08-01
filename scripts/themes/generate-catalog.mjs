@@ -109,6 +109,59 @@ function validateTemplate(id, template) {
   if (slots.filter((slot) => slot === 'tone-label').length > 1) fail(id, 'template may have at most one tone-label slot');
 }
 
+function validateColorSlots(colorSlots) {
+  if (!isRecord(colorSlots)) throw new Error('themes/catalog.json needs a colorSlots object');
+  const expected = [
+    'primary',
+    'secondary',
+    'accent1',
+    'accent2',
+    'accent3',
+    'accent4',
+    'accent5',
+    'accent6',
+    'foreground',
+    'mutedForeground',
+  ];
+  if (Object.keys(colorSlots).join(',') !== expected.join(',')) {
+    throw new Error(`themes/catalog.json colorSlots must contain, in order: ${expected.join(', ')}`);
+  }
+  for (const [tokenId, token] of Object.entries(colorSlots)) {
+    validateToken('catalog', tokenId, token);
+    if (token.type !== 'color') throw new Error(`themes/catalog.json color slot ${tokenId} must use type color`);
+  }
+}
+
+function validateSharedColorSlots(id, tokens, colorSlots) {
+  for (const tokenId of Object.keys(colorSlots)) {
+    if (tokens[tokenId]?.type !== 'color') {
+      fail(id, `shared color slot ${tokenId} must remain a color token`);
+    }
+  }
+}
+
+function cssVariableReferences(css) {
+  const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  return new Set(
+    [...withoutComments.matchAll(/var\(\s*(--[A-Za-z0-9_-]+)/g)]
+      .map((match) => match[1])
+      .filter((variable) => variable.toLowerCase().startsWith('--st-token-')),
+  );
+}
+
+function markColorUsage(pack) {
+  const references = cssVariableReferences(pack.css);
+  return {
+    ...pack,
+    tokens: Object.fromEntries(Object.entries(pack.tokens).map(([tokenId, token]) => [
+      tokenId,
+      token.type === 'color'
+        ? { ...token, used: references.has(tokenVariableName(tokenId)) }
+        : token,
+    ])),
+  };
+}
+
 function validateCss(id, css, tokens) {
   if (/<\/style|url\s*\(|:host\b|!important/i.test(css)) {
     fail(id, 'theme.css contains a forbidden style terminator, URL, host selector, or important rule');
@@ -118,7 +171,7 @@ function validateCss(id, css, tokens) {
     fail(id, 'theme.css selectors must be scoped beneath [data-toast-root]');
   }
   const declared = new Set(Object.keys(tokens).map(tokenVariableName));
-  for (const [, variable] of css.matchAll(/var\((--st-token-[a-z0-9-]+)/gi)) {
+  for (const variable of cssVariableReferences(css)) {
     if (!declared.has(variable)) fail(id, `theme.css references undeclared token ${variable}`);
   }
 }
@@ -143,6 +196,7 @@ const sourceCatalog = JSON.parse(await readFile(catalogPath, 'utf8'));
 if (sourceCatalog.schemaVersion !== 1 || !isRecord(sourceCatalog.entries)) {
   throw new Error('themes/catalog.json must use schemaVersion 1 and an entries object');
 }
+validateColorSlots(sourceCatalog.colorSlots);
 const entries = {};
 const folders = (await readdir(root, { withFileTypes: true }))
   .filter((entry) => entry.isDirectory())
@@ -153,16 +207,24 @@ for (const id of folders) {
   const manifest = JSON.parse(await readFile(join(folder, 'theme.json'), 'utf8'));
   const template = await readFile(join(folder, 'template.html'), 'utf8');
   const css = await readFile(join(folder, 'theme.css'), 'utf8');
-  const pack = { ...manifest, template, css };
+  const pack = {
+    ...manifest,
+    tokens: { ...sourceCatalog.colorSlots, ...manifest.tokens },
+    template,
+    css,
+  };
   validatePack(id, pack);
+  validateSharedColorSlots(id, pack.tokens, sourceCatalog.colorSlots);
   entries[id] = pack;
 }
 for (const [id, override] of Object.entries(sourceCatalog.entries)) {
   if (!entries[id]) fail(id, 'catalog override references an undiscovered theme');
   entries[id] = mergeEntry(entries[id], override, id);
   validatePack(id, entries[id]);
+  validateSharedColorSlots(id, entries[id].tokens, sourceCatalog.colorSlots);
 }
 if (!entries[sourceCatalog.defaultThemeId]) fail(sourceCatalog.defaultThemeId, 'defaultThemeId is not a discovered theme');
+for (const [id, pack] of Object.entries(entries)) entries[id] = markColorUsage(pack);
 await mkdir(resolve(output, '..'), { recursive: true });
 await writeFile(output, `${JSON.stringify({ schemaVersion: 1, defaultThemeId: sourceCatalog.defaultThemeId, themes: entries }, null, 2)}\n`);
 console.log(`Generated ${Object.keys(entries).length} theme pack(s) at ${output}`);

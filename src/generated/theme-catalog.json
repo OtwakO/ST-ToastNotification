@@ -14,7 +14,14 @@
           "default": "#141214",
           "legacyKeys": [
             "primary"
-          ]
+          ],
+          "used": true
+        },
+        "secondary": {
+          "type": "color",
+          "label": "Secondary",
+          "default": "#242124",
+          "used": false
         },
         "accent1": {
           "type": "color",
@@ -22,7 +29,8 @@
           "default": "#e0ccaa",
           "legacyKeys": [
             "accent1"
-          ]
+          ],
+          "used": true
         },
         "accent2": {
           "type": "color",
@@ -30,7 +38,8 @@
           "default": "#f3e6cf",
           "legacyKeys": [
             "accent2"
-          ]
+          ],
+          "used": true
         },
         "accent3": {
           "type": "color",
@@ -38,7 +47,26 @@
           "default": "#eedcbe",
           "legacyKeys": [
             "accent3"
-          ]
+          ],
+          "used": true
+        },
+        "accent4": {
+          "type": "color",
+          "label": "Accent 4",
+          "default": "#c9b99f",
+          "used": false
+        },
+        "accent5": {
+          "type": "color",
+          "label": "Accent 5",
+          "default": "#a9987d",
+          "used": false
+        },
+        "accent6": {
+          "type": "color",
+          "label": "Accent 6",
+          "default": "#877861",
+          "used": false
         },
         "foreground": {
           "type": "color",
@@ -46,7 +74,8 @@
           "default": "#f5f0e8",
           "legacyKeys": [
             "foreground"
-          ]
+          ],
+          "used": true
         },
         "mutedForeground": {
           "type": "color",
@@ -54,7 +83,8 @@
           "default": "#d8cec0",
           "legacyKeys": [
             "mutedForeground"
-          ]
+          ],
+          "used": true
         },
         "titleFontSizePx": {
           "type": "range",

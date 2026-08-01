@@ -29,6 +29,21 @@
   grid-template-columns: 1fr 3rem;
 }
 
+.st-toast-token-status {
+  display: block;
+  opacity: 0.65;
+  font-size: 0.78em;
+  line-height: 1.2;
+}
+
+.st-toast-token-unused {
+  opacity: 0.62;
+}
+
+.st-toast-token-unused input[type='color'] {
+  cursor: not-allowed;
+}
+
 .st-toast-actions {
   display: flex;
   flex-wrap: wrap;

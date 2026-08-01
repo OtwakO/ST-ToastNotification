@@ -82,7 +82,7 @@ themes/my-theme/
 └── theme.css
 ```
 
-`theme.json` declares the theme ID, display name, and editable tokens. `template.html` must contain exactly one `data-toast-root` and one `data-toast-slot="message"`; optional `detail` and `tone-label` slots are supported. `theme.css` must use scoped selectors and declared `--st-token-*` variables. Scripts, inline handlers, remote URLs, and executable markup are rejected during generation.
+`theme.json` declares the theme ID, display name, and any theme-specific editable tokens. Every generated pack also receives the shared ten-color palette from `themes/catalog.json`: `primary`, `secondary`, `accent1`–`accent6`, `foreground`, and `mutedForeground`. A theme opts into a color by referencing its `--st-token-*` variable in `theme.css`; unreferenced color controls are shown disabled as **Unused by this theme** in SillyTavern. `template.html` must contain exactly one `data-toast-root` and one `data-toast-slot="message"`; optional `detail` and `tone-label` slots are supported. `theme.css` must use scoped selectors and declared token variables. Scripts, inline handlers, remote URLs, and executable markup are rejected during generation.
 
 Run:
 
@@ -102,7 +102,7 @@ Install the repository URL through SillyTavern's extension manager:
 https://github.com/OtwakO/ST-ToastNotification
 ```
 
-The extension adds a **Toast Notifications** drawer to extension settings. It persists the selected theme, behavior values, and per-theme token overrides. Controls are generated from each theme manifest using native color pickers, ranges, numbers, selects, and checkboxes, with Preview and Reset actions. Whisper is only the initial default selection.
+The extension adds a collapsed-by-default **Toast Notifications** drawer to extension settings. It persists the selected theme, behavior values, and per-theme token overrides. Controls are generated from each theme manifest using native color pickers, ranges, numbers, selects, and checkboxes, with unused shared colors visibly disabled plus Preview and Reset actions. Whisper is only the initial default selection.
 
 Other SillyTavern extensions can invoke it without importing internal files:
 

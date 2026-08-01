@@ -50,7 +50,7 @@ Every bundled theme is an ordinary file-based pack containing `theme.json`, `tem
 
 Templates use validated named data slots. The renderer clones the selected template, inserts caller text with `textContent`, and retains ownership of accessibility, lifecycle, queueing, viewport placement, and live regions. Theme JavaScript, scripts, inline handlers, arbitrary roles, and executable behavior are forbidden.
 
-Theme manifests declare configurable tokens. The SillyTavern adapter generates native controls from those declarations and persists behavior plus per-theme overrides. V1 supports bundled packs only; remote loading, user-authored themes through the settings UI, and per-notification visual overrides remain out of scope.
+The editable catalog declares a shared ten-color palette that is merged into every generated pack, while theme manifests declare any additional theme-specific tokens. Generator metadata records whether each shared color variable is referenced by the theme stylesheet. The SillyTavern adapter generates native controls from the resulting declarations, disables unreferenced color slots as unused, and persists behavior plus per-theme overrides. Its extension drawer starts collapsed to match ordinary SillyTavern settings behavior. V1 supports bundled packs only; remote loading, user-authored themes through the settings UI, and per-notification visual overrides remain out of scope.
 
 The ordinary-theme invariant is: deleting `themes/whisper/` and changing only the catalog default to another valid pack must leave generation, rendering, settings, tests, and builds functional without TypeScript edits.
 

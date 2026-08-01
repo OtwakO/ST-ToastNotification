@@ -1,5 +1,17 @@
 {
   "schemaVersion": 1,
   "defaultThemeId": "whisper",
+  "colorSlots": {
+    "primary": { "type": "color", "label": "Primary", "default": "#141214" },
+    "secondary": { "type": "color", "label": "Secondary", "default": "#242124" },
+    "accent1": { "type": "color", "label": "Accent 1", "default": "#e0ccaa" },
+    "accent2": { "type": "color", "label": "Accent 2", "default": "#f3e6cf" },
+    "accent3": { "type": "color", "label": "Accent 3", "default": "#eedcbe" },
+    "accent4": { "type": "color", "label": "Accent 4", "default": "#c9b99f" },
+    "accent5": { "type": "color", "label": "Accent 5", "default": "#a9987d" },
+    "accent6": { "type": "color", "label": "Accent 6", "default": "#877861" },
+    "foreground": { "type": "color", "label": "Text", "default": "#f5f0e8" },
+    "mutedForeground": { "type": "color", "label": "Muted text", "default": "#d8cec0" }
+  },
   "entries": {}
 }

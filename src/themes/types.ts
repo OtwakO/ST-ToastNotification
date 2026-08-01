@@ -10,6 +10,8 @@ export interface ThemeTokenBase {
 export interface ColorToken extends ThemeTokenBase {
   type: 'color';
   default: string;
+  /** Generated from theme.css; false means the shared slot is available but unused. */
+  used?: boolean;
 }
 
 export interface NumericToken extends ThemeTokenBase {

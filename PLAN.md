@@ -32,6 +32,7 @@ The project is library-first: a framework-free portable notification module owns
 - **Completed**: Migrated Whisper into `themes/whisper/` with generic manifest, template, and CSS; added build discovery, editable catalog overrides, token validation, named-slot rendering, per-theme settings migration, generated native controls, ordinary-pack fixture tests, and invalid-pack tests.
 - **Completed**: Removed Whisper-specific production TypeScript modules and verified no production `src/**/*.ts` references the theme identity.
 - **Completed**: Hardened theme template/CSS/token validation, restored the Shadow host reset and Whisper hairlines, and verified generated library/extension artifacts after a clean rebuild.
+- **Completed**: Expanded the shared theme palette to ten color slots, marked unreferenced slots as disabled/unused in generated settings, and made the SillyTavern drawer collapsed by default.
 - **In progress**: Browser and real SillyTavern compatibility verification, including generated extension settings and CJK asset loading.
 - **Next**: Verify another physical dropped theme in a local build and complete release documentation.
 - **Environment**: GitHub repository `OtwakO/ST-ToastNotification`; default branch `main`.
@@ -93,3 +94,9 @@ The project is library-first: a framework-free portable notification module owns
 - **Fix**: Added strict declarative attribute/slot/root validation, scoped CSS checks, URL/style-terminator rejection, token ID and select-schema validation, safe style-node text insertion, and a host reset; restored the pack-owned Whisper hairlines.
 - **Affected**: `scripts/themes/generate-catalog.mjs`, `scripts/themes/generator.test.ts`, `src/toast/notifier.ts`, `src/toast/notifier.test.ts`, `themes/whisper/theme.css`
 - **Watch out**: Keep the validator aligned with browser parsing and add adversarial fixtures when the theme contract expands.
+
+### [2026-08-01] Theme colors were too limited and unused controls were ambiguous
+- **Problem**: Themes had only their locally declared colors, while future packs needed a broader predictable palette; the settings drawer also opened expanded instead of matching other extensions.
+- **Fix**: Added ten catalog-level color slots merged into every pack, generated stylesheet-usage metadata, disabled and labeled unused color controls, and initialized the settings drawer collapsed.
+- **Affected**: `themes/catalog.json`, `scripts/themes/generate-catalog.mjs`, `src/themes/types.ts`, `src/sillytavern/adapter.ts`, `style.css`, documentation and tests
+- **Watch out**: A shared color is considered used only when its exact generated CSS variable is referenced in the pack stylesheet.

@@ -28,8 +28,8 @@ These are pack-owned rules, not renderer assumptions. Additional packs may choos
 
 ## V1 customization contract
 
-Each bundled theme manifest declares its editable tokens. The SillyTavern settings surface generates native color, range/number, select, or checkbox controls from those declarations and stores overrides independently per theme. Values apply to the active notifier rather than individual notifications.
+Each bundled theme receives the shared ten-color palette declared by `themes/catalog.json`: primary, secondary, six accents, foreground, and muted foreground. A theme uses only the slots referenced by its stylesheet; the SillyTavern settings surface disables and labels unreferenced slots as unused. Theme manifests may additionally declare range/number, select, checkbox, or other theme-specific controls. Overrides are stored independently per theme and apply to the active notifier rather than individual notifications.
 
-Whisper declares its current six colors and title/detail sizes through that generic manifest. It is the default selected theme, not a special renderer implementation.
+Whisper uses six of the shared colors plus its title/detail size controls. It is the default selected theme, not a special renderer implementation.
 
 V1 does not include runtime theme downloading, theme creation through settings, remote packs, theme JavaScript, or arbitrary per-notification styling.

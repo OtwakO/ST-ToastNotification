@@ -101,7 +101,7 @@ function buildSettingsPanel(settings: ExtensionSettings): HTMLElement {
   const panel = document.createElement('section');
   panel.dataset.stToastSettings = '';
   panel.className = 'st-toast-settings';
-  panel.innerHTML = '<div class="inline-drawer"><div class="inline-drawer-toggle inline-drawer-header"><b>Toast Notifications</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content" data-settings-content></div></div>';
+  panel.innerHTML = '<div class="inline-drawer"><div class="inline-drawer-toggle inline-drawer-header"><b>Toast Notifications</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content" data-settings-content style="display: none"></div></div>';
   renderSettingsPanel(panel, settings);
   return panel;
 }
@@ -140,7 +140,9 @@ function tokenControl(
   const name = escapeAttribute(id);
   const label = escapeText(definition.label);
   if (definition.type === 'color') {
-    return `<label>${label}<input type="color" name="${name}" value="${escapeAttribute(String(value))}"></label>`;
+    const unused = definition.used === false;
+    const status = unused ? '<small class="st-toast-token-status">Unused by this theme</small>' : '';
+    return `<label class="${unused ? 'st-toast-token-unused' : ''}"><span>${label}${status}</span><input type="color" name="${name}" value="${escapeAttribute(String(value))}" ${unused ? 'disabled aria-disabled="true"' : ''}></label>`;
   }
   if (definition.type === 'boolean') {
     return `<label>${label}<input type="checkbox" name="${name}" ${value ? 'checked' : ''}></label>`;
