@@ -66,7 +66,7 @@ The ordinary-theme invariant is: deleting `themes/whisper/` and changing only th
 
 ## Distribution
 
-The build produces a browser ESM artifact and an optional IIFE/global artifact. Git tags provide immutable version targets for CDN consumers. The installable SillyTavern extension commits or packages local generated artifacts so normal operation has no CDN dependency.
+The build produces browser ESM and UMD artifacts plus TypeScript declarations. Git tags provide immutable version targets for CDN consumers. The installable SillyTavern extension commits or packages local generated artifacts so normal operation has no CDN dependency.
 
 ## Security and compatibility
 
